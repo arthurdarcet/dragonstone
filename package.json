@@ -1,0 +1,26 @@
+{
+	"name": "Dragonstone",
+	"version": "0.0.1",
+	"description": "API documentation and browsing",
+	"homepage": "http://github.com/arthurdarcet/dragonstone",
+	"keywords": [
+		"documentation",
+		"api"
+	],
+	"author": "Arthur Darcet <arthur@darcet.fr>",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/arthurdarcet/dragonstone.git"
+	},
+	"dependencies": {
+		"consolidate": "0.9.x",
+		"express": "3.x",
+		"mongojs": "0.7.x",
+		"node.extend": "1.0.x",
+		"supervisor": "0.5.x",
+		"swig": "0.14.x"
+	},
+	"scripts": {
+		"start": "node_modules/.bin/supervisor -e 'js|json' app"
+	}
+}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Dragonstone — {% block title %}{% endblock %}</title>
+		<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/media/main.css">
+		{% block head %}{% endblock %}
+	</head>
+	<body>
+		<div class="{% block container %}container{% endblock %}">{% block content %}{% endblock %}</div>
+		{% block js %}
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+			<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+		{% endblock %}
+	</body>
+</html>
