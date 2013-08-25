@@ -13,6 +13,7 @@
 		"url": "git://github.com/arthurdarcet/dragonstone.git"
 	},
 	"dependencies": {
+		"async": "0.2.x",
 		"consolidate": "0.9.x",
 		"express": "3.x",
 		"node.extend": "1.0.x",

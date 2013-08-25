@@ -31,6 +31,7 @@ if (cluster.isMaster) {
 
 	app.get('/', routes.show);
 	app.get('/call', routes.call);
+	app.get('/check.json', routes.check);
 	app.use('/test-api', routes.test_api);
 	
 	app.listen(config.listen.port, config.listen.host);
