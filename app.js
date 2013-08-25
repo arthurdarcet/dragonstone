@@ -2,6 +2,7 @@ var cluster     = require('cluster');
 var express     = require('express');
 var consolidate = require('consolidate');
 var swig        = require('swig');
+var config      = require('./config');
 var routes      = require('./routes');
 
 
@@ -24,5 +25,5 @@ if (cluster.isMaster) {
 		filters: require('./filters')
 	});
 	
-	app.listen(process.env.PORT || 1112);
+	app.listen(config.listen.port, config.listen.host);
 }
