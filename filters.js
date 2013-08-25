@@ -60,6 +60,7 @@ module.exports = {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';
 		var OPTIONAL_KEY = '(optional) ';
 		function stringify(obj, indent) {
+			if (!obj) return '';
 			if (obj instanceof Array) {
 				var res = "[";
 				if (is_valued) {

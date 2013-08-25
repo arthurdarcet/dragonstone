@@ -54,12 +54,10 @@ function check(response, q) {
 		return schemas.split('|').indexOf(data) != -1;
 	}
 
-	var method = methods[q.uri];
-	if (!method || !method.responses)
-		return true;
-
-	var schemas = method.responses[response.status] || method.responses[('' + response.status)[0] + 'xx'] || method.responses.xxx;
-	return !schemas || aux(response.data, schemas)
+	var method = methods[q.uri] || {};
+	var responses = method.responses || {};
+	var schemas = responses[response.status] || responses[('' + response.status)[0] + 'xx'] || responses.xxx;
+	return schemas && aux(response.data, schemas)
 }
 
 function check_all(req, cb) {
@@ -85,7 +83,7 @@ function check_all(req, cb) {
 				response.uri = o.uri;
 				response.check = check(response, o);
 				cb(null, response);
-			})
+			});
 		}, cb);
 	}, function(_, results) {
 		out = [];

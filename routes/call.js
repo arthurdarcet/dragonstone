@@ -30,8 +30,8 @@ module.exports = function(req, res) {
 	if (!req.query.uri) {
 		return res.send(400, 'Missing URI');
 	}
-	call(req.query, function(_, response) {
-		res.send(response.status, {
+	call(req.query, function(err, response) {
+		res.send(response.status || 400, err || {
 			data: filters.object(response.data, true),
 			status: response.status,
 			valid: check.check(response, req.query)
