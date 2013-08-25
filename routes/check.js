@@ -20,6 +20,10 @@ function check(data, q) {
 			for (var i in data)
 				if (!aux(data[i], schemas[0]))
 					return false
+			if (schemas[1] && data.length > schemas[1])
+				return false;
+			if (schemas[2] && data.length < schemas[2])
+				return false;
 			return true;
 		}
 		if (data instanceof Object) {
@@ -28,6 +32,9 @@ function check(data, q) {
 			for (var i in data)
 				if (!aux(data[i], schemas[i]))
 					return false
+			for (var i in schemas)
+				if (!(i in data))
+					return false;
 			return true;
 		}
 
@@ -43,8 +50,9 @@ function check(data, q) {
 
 		return schemas.split('|').indexOf(data) != -1;
 	}
+
 	var method = methods[q.uri];
-	return method && (!method.response || aux(data, method.response));
+	return !method || !method.response || aux(data, method.response);
 }
 
 function check_all(req, cb) {
