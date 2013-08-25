@@ -6,82 +6,100 @@
 <div class="page-header">
 	<h1>{{ name }} <small class="pull-right">Base URL: <a href="{{ base_url }}">{{ base_url }}</a></small></h1>
 </div>
-
-<dl>
+<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	{% for endpoint in endpoints %}
-	<dt class="category"><span>{{ endpoint.name }}:</span></dt>
-	{% for method in endpoint.methods %}
-	<dd class="panel panel-default">
-		<div class="panel-heading">
-			{% if method.auth_required %}
-			<span class="auth_required">Auth required</span>
-			{% endif %}
-			<span class="verb">{{ method.verb }}</span>
-			<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>{% if method.description %}:{% endif %} 
-			<span class="text-muted">{{ method.description }}</span>
-		</div>
-		<dl class="list-group">
-			<dt class="list-group-item">Parameters:</dt>
-			<dd class="list-group-item">
-				<form role="form">
-					{% if method.parameters %}
-					<table class="table">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Key</th>
-								<th>Value</th>
-								<th>Type</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for parameter in method.parameters %}
-							<tr>
-								<td {% if parameter.required %}class="required"{% endif %}></td>
-								<td>{{ parameter.name }}</td>
-								<td>{{ parameter|value|raw }}</td>
-								<td>{{ parameter|type|raw }}</td>
-								<td>{{ parameter.description }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					{% else %}
-					<span class="text-muted">None</span>
-					{% endif %}
-				</form>
-			</dd>
-			<dt class="list-group-item">Response code:</dt>
-			<dd class="list-group-item">
-				{% if method.response_code.toFixed %}
-				{# The response code is an int #}
-				<span class="response-code">{{ method.response_code }}</span>
-				{% else %}
-				{% for description in method.response_code %}
-				<span class="response-code">{{ loop.key }}</span>: {{ description }}<br>
-				{% endfor %}
+	<li class="{% if loop.first %}active{% endif %}"><a href="#{{ endpoint.name }}" data-toggle="tab">{{ endpoint.name}}</a></li>
+	{% endfor %}
+	<li class="pull-right"><a id="go-to-custom-types" href="#custom-types" data-toggle="tab">Custom types</a></li>
+</ul>
+<div class="tab-content">
+	{% for endpoint in endpoints %}
+	<div class="tab-pane {% if loop.first %}active{% endif %}" id="{{ endpoint.name }}">
+		{% for method in endpoint.methods %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% if method.auth_required %}
+				<span class="auth_required">Auth required</span>
 				{% endif %}
-			</dd>
-			<dt class="list-group-item">Response:</dt>
-			<dd class="list-group-item">
-				<div class="object">
-					{{ method.response|object|raw }}
-				</div>
-			</li>
-		</dl>
-	</dd>
+				<span class="verb">{{ method.verb }}</span>
+				<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>{% if method.description %}:{% endif %} 
+				<span class="text-muted">{{ method.description }}</span>
+			</div>
+			<dl class="list-group">
+				<dt class="list-group-item">Parameters:</dt>
+				<dd class="list-group-item">
+					<form role="form">
+						{% if method.parameters %}
+						<table class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Key</th>
+									<th>Value</th>
+									<th>Type</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for parameter in method.parameters %}
+								<tr>
+									<td>{% if parameter.required %}*{% endif %}</td>
+									<td>{{ parameter.name }}</td>
+									<td>{{ parameter|value|raw }}</td>
+									<td>{{ parameter|type|raw }}</td>
+									<td>{{ parameter.description }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						{% else %}
+						<span class="text-muted">None</span>
+						{% endif %}
+					</form>
+				</dd>
+				<dt class="list-group-item">Response code:</dt>
+				<dd class="list-group-item">
+					{% if method.response_code.toFixed %}
+					{# The response code is an int #}
+					<span class="response-code">{{ method.response_code }}</span>
+					{% else %}
+					{% for description in method.response_code %}
+					<span class="response-code">{{ loop.key }}</span>: {{ description }}<br>
+					{% endfor %}
+					{% endif %}
+				</dd>
+				<dt class="list-group-item">Response:</dt>
+				<dd class="list-group-item">
+					<div class="object">
+						{{ method.response|object|raw }}
+					</div>
+				</li>
+			</dl>
+		</div>
+		{% endfor %}
+	</div>
 	{% endfor %}
-	{% endfor %}
-	<dt class="category"><span>Custom types:</span></dt>
-	{% for type in custom_types %}
-	{% if not type.inline %}
-	<dd id="custom-type-{{ loop.key }}" class="panel panel-default">
-		<div class="panel-heading">{{ type.name }}</div>
-		<div class="panel-body">{{ type.type|object|raw }}</div>
-	</dd>
-	{% endif %}
-	{% endfor %}
+	<div class="tab-pane" id="custom-types">
+		{% for type in custom_types %}
+		{% if not type.inline %}
+		<div id="custom-type-{{ loop.key }}" class="panel panel-default">
+			<div class="panel-heading">{{ type.name }}</div>
+			<div class="panel-body">{{ type.type|object|raw }}</div>
+		</div>
+		{% endif %}
+		{% endfor %}
+	</div>
 </dl>
 
+{% endblock %}
+
+{% block js %}
+{% parent %}
+<script>
+	$(document).ready(function() {
+		$('.custom-type').click(function(evt) {
+			$('#go-to-custom-types').click();
+		});
+	});
+</script>
 {% endblock %}

@@ -15,13 +15,6 @@
 .base-type, .response-code {
 	color: rgb(120, 170, 40)
 }
-
-.uri {
-
-}
-.verb {
-
-}
 .auth_required {
 	float: right;
 }
@@ -34,16 +27,6 @@ dd.list-group-item  {
 	margin-bottom: 0;
 }
 
-.category {
-	border-bottom: 1px solid #F0F0F0;
-	font-size: 25px;
-	margin-bottom: 30px;
-}
-.category span {
-	position: relative;
-	top: 17px;
-	color: #666;
-	margin-left: 40px;
-	background-color: white;
-	padding: 0 15px;
+.nav {
+	margin-bottom: 20px;
 }
