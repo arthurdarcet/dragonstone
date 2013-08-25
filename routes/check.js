@@ -31,11 +31,17 @@ function check(data, q) {
 			return true;
 		}
 
-		if (schemas == 'int' || schemas == 'float')
-			schemas = 'number';
-		if (schemas == 'bool')
-			schemas = 'boolean';
-		return typeof(data) == schemas;
+		if (typeof(data) == 'number')
+			return schemas == 'int' || schemas == 'float';
+		if (typeof(data) == 'boolean')
+			return schemas == 'bool';
+		if (typeof(data) == schemas)
+			return true;
+
+		console.assert(typeof(data) == 'string');
+		console.assert(typeof(schemas) == 'string');
+
+		return schemas.split('|').indexOf(data) != -1;
 	}
 	var method = methods[q.uri];
 	return method && (!method.response || aux(data, method.response));
