@@ -9,10 +9,13 @@ config.endpoints.map(function(endpoint) {
 		methods[filters.endpoint(uri, endpoint)] = endpoint.methods[uri];
 });
 
+var OPTIONAL_KEY = '(optional) ';
 function check(data, q) {
 	function aux(data, schemas) {
 		if (typeof(schemas) == 'string' && config.custom_types[schemas])
 			return aux(data, config.custom_types[schemas].type);
+		if (typeof(schemas) == 'string' && schemas.indexOf(OPTIONAL_KEY) === 0)
+			return aux(data, schemas.slice(OPTIONAL_KEY.length));
 
 		if (data instanceof Array) {
 			if (!(schemas instanceof Array))
@@ -33,7 +36,7 @@ function check(data, q) {
 				if (!aux(data[i], schemas[i]))
 					return false
 			for (var i in schemas)
-				if (!(i in data))
+				if (schemas[i].indexOf(OPTIONAL_KEY) !== 0 && !(i in data))
 					return false;
 			return true;
 		}

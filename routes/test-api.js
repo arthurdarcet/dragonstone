@@ -21,7 +21,13 @@ router.get('/posts/:slug', function(req, res) {
 	if (!/^post-[0-9]$/.test(req.params.slug) || i > 3) 
 		res.send(404, {});
 	else
-		res.send({content: 'content post ' + i, date: 1377451842 - 1000*i, slug: 'post-' + i, title: 'Post ' + i});
+		res.send({
+			content: 'content post ' + i,
+			date: 1377451842 - 1000*i,
+			slug: 'post-' + i,
+			title: 'Post ' + i,
+			category: ['js', 'python', 'cpp'][Math.floor(Math.random()*3)]
+		});
 });
 router.post('/posts', function(req, res) {
 	res.send(500, {message: 'Not implemented'});
