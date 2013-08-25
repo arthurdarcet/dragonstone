@@ -79,9 +79,12 @@ function check_all(req, cb) {
 				base_url: req.query.base_url,
 				uri: o.uri,
 				params: params
-			}, function(_, response) {
+			}, function(err, response) {
 				response.uri = o.uri;
-				response.check = check(response, o);
+				if (err)
+					response.error = err;
+				else
+					response.check = check(response, o);
 				cb(null, response);
 			});
 		}, cb);

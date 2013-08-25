@@ -124,7 +124,10 @@
 				}
 				else {
 					error_el.show();
-					error_el.html((error || 'Error') + ': ' + data.responseText);
+					if (data.responseJSON && data.responseJSON.data)
+						error_el.html(data.responseJSON.data);
+					else
+						error_el.html((error || 'Error') + ': ' + data.responseText);
 				}
 			});
 		})
