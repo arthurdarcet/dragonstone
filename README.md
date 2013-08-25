@@ -1,11 +1,11 @@
 Dragonstone
 ===========
 
-![Dragonstone](http://images1.wikia.nocookie.net/__cb20130501013128/gameofthrones/images/thumb/f/fb/Dragonstone_%28day%29.jpg/1000px-Dragonstone_%28day%29.jpg)
+Live demo [here](http://dragonstone.darcet.fr)
 
 ### Config
 Override the default settings by defining them in `config/local.js`
- - `listen`: `{host: "127.0.0.1", port: 1111}
+ - `listen`: `{host: "127.0.0.1", port: 1111}`
  - `name`
  - `base_url`
  - `auth`
