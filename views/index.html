@@ -19,44 +19,41 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				{% if method.auth_required %}
-				<span class="auth_required">Auth required</span>
+				<i class="glyphicon glyphicon-lock"></i>
 				{% endif %}
+				<span class="btn btn-default btn-sm pull-right test-endpoint">Try it</span>
 				<span class="verb">{{ method.verb }}</span>
 				<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>{% if method.description %}:{% endif %} 
 				<span class="text-muted">{{ method.description }}</span>
 			</div>
 			<dl class="list-group">
+				{% if method.parameters %}
 				<dt class="list-group-item">Parameters:</dt>
 				<dd class="list-group-item">
-					<form role="form">
-						{% if method.parameters %}
-						<table class="table">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Key</th>
-									<th>Value</th>
-									<th>Type</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for parameter in method.parameters %}
-								<tr>
-									<td>{% if parameter.required %}*{% endif %}</td>
-									<td>{{ parameter.name }}</td>
-									<td>{{ parameter|value|raw }}</td>
-									<td>{{ parameter|type|raw }}</td>
-									<td>{{ parameter.description }}</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-						{% else %}
-						<span class="text-muted">None</span>
-						{% endif %}
-					</form>
+					<table class="table">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Key</th>
+								<th>Value</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for parameter in method.parameters %}
+							<tr>
+								<td>{% if parameter.required %}*{% endif %}</td>
+								<td>{{ parameter.name }}</td>
+								<td>{{ parameter|value|raw }}</td>
+								<td>{{ parameter|type|raw }}</td>
+								<td>{{ parameter.description }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 				</dd>
+				{% endif %}
 				<dt class="list-group-item">Response code:</dt>
 				<dd class="list-group-item">
 					{% if method.response_code.toFixed %}
@@ -73,7 +70,13 @@
 					<div class="object">
 						{{ method.response|object|raw }}
 					</div>
-				</li>
+				</dd>
+				<dt class="list-group-item hide test-result">Results:</dt>
+				<dd class="list-group-item hide test-result">
+					<div class="object test-result-data"></div>
+					<div class="test-result-error alert alert-danger"></div>
+					<div class="test-result-loading"></div>
+				<dd>
 			</dl>
 		</div>
 		{% endfor %}
@@ -100,6 +103,36 @@
 		$('.custom-type').click(function(evt) {
 			$('#go-to-custom-types').click();
 		});
+		$('.test-endpoint').click(function(evt) {
+			var endpoint = $(evt.currentTarget).parent().parent();
+			var data_el = endpoint.find('.test-result-data').hide();
+			var error_el = endpoint.find('.test-result-error').hide();
+			var loading_el = endpoint.find('.test-result-loading').show();
+			endpoint.find('.test-result').removeClass('hide');
+
+			var url = '{{ base_url }}' + endpoint.find('.uri').html();
+			var params = {};
+			endpoint.find('input').each(function() {
+				if (url.indexOf('{' + this.name + '}') != -1)
+					url = url.replace('{' + this.name + '}', this.value);
+				else if (this.value) params[this.name] = this.value;
+			});
+			$.ajax({
+				url: url,
+				type: endpoint.find('.verb').html(),
+				data: params
+			}).always(function(data, status, error) {
+				loading_el.hide();
+				if (status == 'success') {
+					data_el.show();
+					data_el.html(JSON.stringify(data));
+				}
+				else {
+					error_el.show();
+					error_el.html('Error: ' + error);
+				}
+			});
+		})
 	});
 </script>
 {% endblock %}

@@ -1,7 +1,7 @@
 module.exports = {
 	listen: {host: '127.0.0.1', port: 1111},
 	name: 'Example API',
-	base_url: 'http://localhost/v1',
+	base_url: 'http://localhost:1111/test-api',
 	auth: false,
 	endpoints: [{
 		name: 'Users',
