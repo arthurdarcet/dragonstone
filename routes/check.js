@@ -1,12 +1,12 @@
 var async = require('async');
 var config = require('../config');
+var filters = require('../filters');
 
 
 var methods = {};
 config.endpoints.map(function(endpoint) {
-	endpoint.methods.map(function(method) {
-		methods[method.verb + ' ' + endpoint.prefix + method.URI] = method;
-	});
+	for (var uri in endpoint.methods)
+		methods[filters.endpoint(uri, endpoint)] = endpoint.methods[uri];
 });
 
 function check(data, q) {
@@ -37,7 +37,7 @@ function check(data, q) {
 			schemas = 'boolean';
 		return typeof(data) == schemas;
 	}
-	var method = methods[q.method + ' ' + q.url];
+	var method = methods[q.uri];
 	return method && (!method.response || aux(data, method.response));
 }
 
@@ -45,24 +45,27 @@ module.exports = function(req, res) {
 	var call = require('./call');
 	var base_url = req.query.base_url || config.base_url;
 	async.map(config.endpoints, function(endpoint, cb) {
-		async.map(endpoint.methods, function(method, cb) {
+		var methods = [];
+		for (var uri in endpoint.methods) {
+			methods.push({uri: filters.endpoint(uri, endpoint), method: endpoint.methods[uri]});
+		}
+		async.map(methods, function(o, cb) {
 			var params = {};
-			if (method.parameters) {
-				method.parameters.map(function(param) {
+			if (o.method.parameters) {
+				o.method.parameters.map(function(param) {
 					if (param.testing) params[param.name] = param.testing;
 				});
 			}
 			call.call({
 				base_url: req.query.base_url,
-				method: method.verb,
-				url: endpoint.prefix + method.URI,
+				uri: o.uri,
 				params: params
 			}, function(err, data) {
-				data.method = method;
+				data.method = o.method;
 				if (err)
 					data.error = err;
 				else
-					data.check = check(data.data, {method: method.verb, url: endpoint.prefix + method.URI});
+					data.check = check(data.data, o);
 				cb(null, data);
 			})
 		}, cb);

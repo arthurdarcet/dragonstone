@@ -6,80 +6,78 @@ module.exports = {
 	endpoints: [{
 		name: 'Users',
 		prefix: '/users',
-		methods: [{
-			description: 'Get a specific user',
-			verb: 'GET',
-			URI: '/{name}',
-			auth_required: false,
-			parameters: [{
-				name: 'name',
-				description: 'The name of the requested user',
-				required: true,
-				type: 'string'
-			}],
-			response_code: {
-				200: 'A user was returned',
-				404: 'No user with this name exists'
-			},
-			response: 'user'
-		}]
+		methods: {
+			'GET /{name}': {
+				description: 'Get a specific user',
+				auth_required: false,
+				parameters: [{
+					name: 'name',
+					description: 'The name of the requested user',
+					required: true,
+					type: 'string'
+				}],
+				response_code: {
+					200: 'A user was returned',
+					404: 'No user with this name exists'
+				},
+				response: 'user'
+			}
+		}
 	}, {
 		name: 'Posts',
 		prefix: '/posts',
-		methods: [{
-			description: 'List all available posts',
-			verb: 'GET',
-			URI: '',
-			auth_required: false,
-			response_code: 200,
-			response: [{
-				slug: 'string',
-				url: 'url'
-			}]
-		}, {
-			description: 'Get a specific post',
-			verb: 'GET',
-			URI: '/{slug}',
-			auth_required: false,
-			parameters: [{
-				name: 'slug',
-				description: 'The slug of the requested post',
-				required: true,
-				type: 'string'
-			}],
-			response_code: {
-				200: 'A post was returned',
-				404: 'No post with this slug exists'
+		methods: {
+			'GET /': {
+				description: 'List all available posts',
+				auth_required: false,
+				response_code: 200,
+				response: [{
+					slug: 'string',
+					url: 'url'
+				}]
 			},
-			response: 'post'
-		}, {
-			verb: 'POST',
-			URI: '',
-			auth_required: true,
-			parameters: [{
-				name: 'title',
-				description: 'The title of the post',
-				required: true,
-				type: 'string'
-			}, {
-				name: 'content',
-				description: 'The content of the post',
-				required: true,
-				type: 'string'
-			}, {
-				name: 'category',
-				description: 'The category of the post',
-				required: false,
-				default: 'misc',
-				type: 'string'
-			}],
-			response_code: {
-				201: 'A post was created',
-				400: 'Client error',
-				500: 'Server error'
+			'GET /{slug}': {
+				description: 'Get a specific post',
+				auth_required: false,
+				parameters: [{
+					name: 'slug',
+					description: 'The slug of the requested post',
+					required: true,
+					type: 'string'
+				}],
+				response_code: {
+					200: 'A post was returned',
+					404: 'No post with this slug exists'
+				},
+				response: 'post'
 			},
-			response: {slug: '(optional) string', message: '(optional) string'}
-		}]
+			'POST /': {
+				auth_required: true,
+				parameters: [{
+					name: 'title',
+					description: 'The title of the post',
+					required: true,
+					type: 'string'
+				}, {
+					name: 'content',
+					description: 'The content of the post',
+					required: true,
+					type: 'string'
+				}, {
+					name: 'category',
+					description: 'The category of the post',
+					required: false,
+					default: 'misc',
+					type: 'string'
+				}],
+				response_code: {
+					201: 'A post was created',
+					400: 'Client error',
+					500: 'Server error'
+				},
+				response: {slug: '(optional) string', message: '(optional) string'}
+			}
+		}
 	}],
 	custom_types: {
 		timestamp: {

@@ -22,8 +22,7 @@
 				<i class="glyphicon glyphicon-lock"></i>
 				{% endif %}
 				<span class="btn btn-default btn-sm pull-right test-endpoint">Try it</span>
-				<span class="verb">{{ method.verb }}</span>
-				<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>{% if method.description %}:{% endif %} 
+				<span class="uri">{{ loop.key|endpoint(endpoint) }}</span>{% if method.description %}:{% endif %} 
 				<span class="text-muted">{{ method.description }}</span>
 			</div>
 			<dl class="list-group">
@@ -122,9 +121,8 @@
 			$.ajax({
 				url: '/call',
 				data: {
-					url: endpoint.find('.uri').html(),
+					uri: endpoint.find('.uri').html(),
 					params: params,
-					method: endpoint.find('.verb').html()
 				}
 			}).always(function(data, status, error) {
 				loading_el.hide();

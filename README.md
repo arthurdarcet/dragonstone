@@ -9,7 +9,7 @@ Override the default settings by defining them in `config/local.js`
  - `name`
  - `base_url`
  - `auth`
- - `endpoints`: list of `{"name": "…", "prefix": "…", "methods": [<Method>, …]}`
+ - `endpoints`: list of `{"name": "…", "prefix": "…", "methods": {"<VERB> URI": <Method>, …}}` with `VERB` being an `HTTP` verb (`GET`, `POST`, …)
  - `custom_types`: object of `{id: <Custom type>}`
 
 #### Method

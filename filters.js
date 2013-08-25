@@ -26,6 +26,10 @@ function type_tag(type) {
 }
 
 module.exports = {
+	endpoint: function(uri, endpoint) {
+		uri = uri.split(' ');
+		return uri[0] + ' ' + endpoint.prefix + uri.slice(1).join(' ');
+	},
 	type: function(parameter) {
 		return type_tag(parameter.type);
 	},
