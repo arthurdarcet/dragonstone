@@ -12,7 +12,8 @@ Override the default settings by defining them in `config/local.js`
  - `endpoints`: list of `{"name": "…", "prefix": "…", "methods": [<Method>, …]}`
  - `custom_types`: object of `{id: <Custom type>}`
 
-#### Method object
+#### Method
+Object with the following attributes:
  - `description`
  - `verb`
  - `URI` (ex: `/users/{name}` where `name` is the name of one of the parameters)
@@ -21,18 +22,24 @@ Override the default settings by defining them in `config/local.js`
   - `name`
   - `description`
   - `required`
-  - `type` (an `<Object>`)
-  - `default` (the value the API will default to if the parameter isn't supplied)
+  - `type`: a `<Parameter>`
+  - `default`: the value the API will default to if the parameter isn't supplied
  - `reponse`: `<Object>`
  - `responseCode`: `200` or `{"200": "description", "303": "…"}`
 
+#### Parameter
+One of the following:
+ - `int`, `float`, `string` or `bool`
+ - `"value1|value2|…"`
+ - Custom type id
+
+
 #### Object
-Either :
+One of the following:
  - `(optional) <Object>`
  - `{"key": <Object>, …}`
  - `[<Object>]`, `[<Object>, size_max]` or `[<Object>, size_max, size_min]`
- - `int`, `float`, `string` or `bool`
- - Custom type id
+ - `<Parameter>`
 
 #### Custom type
 Object with the following attributes:

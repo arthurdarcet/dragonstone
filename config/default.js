@@ -5,7 +5,7 @@ module.exports = {
 	auth: false,
 	endpoints: [{
 		name: 'Users',
-		prefix: '/users'
+		prefix: '/users',
 		methods: [{
 			description: 'Get a specific user',
 			verb: 'GET',
@@ -37,7 +37,7 @@ module.exports = {
 				url: 'url'
 			}]
 		}, {
-			description: 'Get a specific post'
+			description: 'Get a specific post',
 			verb: 'GET',
 			URI: '/{slug}',
 			auth_required: false,
@@ -65,6 +65,12 @@ module.exports = {
 				name: 'content',
 				description: 'The content of the post',
 				required: true,
+				type: 'string'
+			}, {
+				name: 'category',
+				description: 'The category of the post',
+				required: false,
+				default: 'misc',
 				type: 'string'
 			}],
 			responseCode: {
@@ -103,6 +109,5 @@ module.exports = {
 				title: 'string'
 			}
 		}
-
 	}
 };

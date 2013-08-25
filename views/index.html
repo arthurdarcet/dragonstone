@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>{{ name }}</h1>
+<h6>Base URL: <a href="{{ base_url }}">{{ base_url }}</a></h6>
+
+<h4>Endpoints</h4>
+<ul class="endpoints">
+	{% for endpoint in endpoints %}
+	<li>
+		<span class="name">{{ endpoint.name }}</span>
+		<ul>
+			{% for method in endpoint.methods %}
+			<li class="method">
+				<div class="header">
+					<span class="verb">{{ method.verb }}</span>
+					<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>
+					<span class="description">{{ method.description }}</span>
+					{% if method.auth_required %}
+					<span class="auth_required">Auth required</span>
+					{% endif %}
+				</div>
+				<table class="parameters">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Parameter</th>
+							<th>Value</th>
+							<th>Type</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for parameter in method.parameters %}
+						<tr>
+							<td {% if parameter.required %}class="required"{% endif %}></td>
+							<td>{{ parameter.name }}</td>
+							<td>{{ parameter|value|raw }}</td>
+							<td>{{ parameter|type|raw }}</td>
+							<td>{{ parameter.description }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<table class="response-codes">
+					<thead>
+						<tr>
+							<th colspan="2">Response Codes:</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if method.responseCode.toFixed %}
+						{# The response Code is an int #}
+						<tr>
+							<td>{{ method.responseCode }}</td>
+							<td></td>
+						</tr>
+						{% else %}
+						{% for description in method.responseCode %}
+						<tr>
+							<td>{{ loop.key }}: </td>
+							<td>{{ description }}</td>
+						</tr>
+						{% endfor %}
+						{% endif %}
+					</tbody>
+				</table>
+				<div class="object">
+					{{ method.response|object|raw }}
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</li>
+	{% endfor %}
+</ul>
+
+<h4>Custom types</h4>
+<ul>
+	{% for type in custom_types %}
+	{% if not type.inline %}
+	<li id="custom-type-{{ type.id }}">
+		<span class="name">{{ type.name }}</span>
+		<div class="object">
+			{{ type.type|object|raw }}
+		</div>
+	</li>
+	{% endif %}
+	{% endfor %}
+</ul>
+{% endblock %}

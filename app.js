@@ -24,6 +24,12 @@ if (cluster.isMaster) {
 		root: __dirname + '/views',
 		filters: require('./filters')
 	});
+
+	if (config.debug) {
+		app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
+	}
+
+	app.get('/', routes.show);
 	
 	app.listen(config.listen.port, config.listen.host);
 }
