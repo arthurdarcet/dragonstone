@@ -1,3 +1,4 @@
 module.exports = {
-	show: require('./show')
+	show: require('./show'),
+	test_api: require('./test-api')
 };

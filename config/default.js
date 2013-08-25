@@ -75,7 +75,8 @@ module.exports = {
 			}],
 			response_code: {
 				201: 'A post was created',
-				400: 'Something went wrong'
+				400: 'Client error',
+				500: 'Server error'
 			},
 			response: {slug: '(optional) string', message: '(optional) string'}
 		}]
