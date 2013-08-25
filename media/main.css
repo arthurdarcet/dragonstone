@@ -4,11 +4,13 @@
 	padding: 10px;
 }
 
-.custom-type, .base-type, .enumerated-type, .response-code, .uri, .verb {
+.custom-type, .base-type, .enumerated-type, .response-code, .uri, .verb, .key, .string-value, .boolean-value, .number-value {
 	font-family: monospace;
 }
+.key {
+	color: rgb(70, 70, 70);
+}
 .custom-type {
-	cursor: pointer;
 	text-decoration: underline;
 	color: rgb(100, 100, 200);
 }
@@ -17,6 +19,15 @@
 }
 .auth_required {
 	float: right;
+}
+.boolean-value {
+	color: rgb(180, 100, 100);
+}
+.string-value {
+	color: rgb(100, 100, 180);
+}
+.number-value {
+	color: rgb(100, 180, 100);
 }
 
 dd.list-group-item  {

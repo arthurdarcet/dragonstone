@@ -4,6 +4,10 @@ function muted(txt) {
 	return '<span class="text-muted">' + txt + '</span>';
 }
 
+function value_tag(value) {
+	return '<span class="' + typeof(value) + '-value">' + value + '</span>';
+}
+
 function type_tag(type) {
 	if (['int', 'float', 'string', 'bool'].indexOf(type) != -1)
 		return '<span class="base-type">' + type + '</span>';
@@ -40,26 +44,32 @@ module.exports = {
 		}
 		return '<input ' + attr + ' placeholder="' + (parameter.default || '') + '">';
 	},
-	object: function(obj) {
+	object: function(obj, is_valued) {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';
 		var OPTIONAL_KEY = '(optional) ';
 		function stringify(obj, indent) {
 			if (obj instanceof Array) {
 				var res = "[";
-				res += indent + stringify(obj[0], indent) + ", ";
-				var length = '…';
-				if (obj.length > 1) {
-					length = 'len ≤ ' + obj[1];
+				if (is_valued) {
+					res += obj.map(function(o) { return stringify(o, indent) }).join(', ');
 				}
-				if (obj.length > 2) {
-					length = obj[2] + ' ≤ ' + length;
+				else {
+					res += indent + stringify(obj[0], indent) + ", ";
+					var length = '…';
+					if (obj.length > 1) {
+						length = 'len ≤ ' + obj[1] + ' ';
+					}
+					if (obj.length > 2) {
+						length = obj[2] + ' ≤ ' + length;
+					}
+					res += muted(length);
 				}
-				return res + muted(length) + ' ]';
+				return res + ']';
 			}
 			if (obj instanceof Object) {
 				var res = indent + "{<br>";
 				for (var key in obj) {
-					res += indent + INDENT + key + ': ' + stringify(obj[key], indent + INDENT) + ",<br>";
+					res += indent + INDENT + '<span class="key">' + key + '</span>' + ': ' + stringify(obj[key], indent + INDENT) + ",<br>";
 				}
 				return res.slice(0, -5) + "<br>" + indent + "}";
 			}
@@ -69,7 +79,7 @@ module.exports = {
 			var custom_type = config.custom_types[obj];
 			if (custom_type && custom_type.inline)
 				return stringify(custom_type.type, indent) + muted(' (' + custom_type.name + ')');
-			return type_tag(obj);
+			return is_valued ? value_tag(obj) : type_tag(obj);
 		}
 		return stringify(obj, '');
 	}

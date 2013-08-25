@@ -110,26 +110,26 @@
 			var loading_el = endpoint.find('.test-result-loading').show();
 			endpoint.find('.test-result').removeClass('hide');
 
-			var url = '{{ base_url }}' + endpoint.find('.uri').html();
 			var params = {};
 			endpoint.find('input').each(function() {
-				if (url.indexOf('{' + this.name + '}') != -1)
-					url = url.replace('{' + this.name + '}', this.value);
-				else if (this.value) params[this.name] = this.value;
+				if (this.value) params[this.name] = this.value;
 			});
 			$.ajax({
-				url: url,
-				type: endpoint.find('.verb').html(),
-				data: params
+				url: '/call',
+				data: {
+					url: endpoint.find('.uri').html(),
+					params: params,
+					method: endpoint.find('.verb').html()
+				}
 			}).always(function(data, status, error) {
 				loading_el.hide();
 				if (status == 'success') {
 					data_el.show();
-					data_el.html(JSON.stringify(data));
+					data_el.html(data);
 				}
 				else {
 					error_el.show();
-					error_el.html('Error: ' + error);
+					error_el.html((error || 'Error') + ': ' + data.responseText);
 				}
 			});
 		})
