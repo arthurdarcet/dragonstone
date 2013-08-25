@@ -44,5 +44,5 @@ One of the following:
 #### Custom type
 Object with the following attributes:
  - `name`
- - `inline`: weither this custom type should be described in the "Custom type section" of the doc or it's description should be copied everywhere it's mentionned
+ - `inline`: whether this custom type should be described in the "Custom type section" of the doc or it's `name` should be copied everywhere it's mentionned along with its `type`
  - `type`: `<Object>`

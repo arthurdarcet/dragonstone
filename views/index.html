@@ -76,7 +76,7 @@
 	<dt class="category"><span>Custom types:</span></dt>
 	{% for type in custom_types %}
 	{% if not type.inline %}
-	<dd id="custom-type-{{ type.id }}" class="panel panel-default">
+	<dd id="custom-type-{{ loop.key }}" class="panel panel-default">
 		<div class="panel-heading">{{ type.name }}</div>
 		<div class="panel-body">{{ type.type|object|raw }}</div>
 	</dd>
