@@ -14,7 +14,7 @@
 	text-decoration: underline;
 	color: rgb(100, 100, 200);
 }
-.base-type, .response-code {
+.base-type, .response-code, .enumerated-type {
 	color: rgb(120, 170, 40)
 }
 .auth_required {

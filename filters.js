@@ -13,12 +13,12 @@ function type_tag(type) {
 		return '<span class="base-type">' + type + '</span>';
 
 	if (type.indexOf('|') > 0)
-		return '<span class="enumerated-type">enumerated</span>';
+		return '<span class="enumerated-type">enumerated</span> ' + muted('(' + type.split('|').join(', ') + ')');
 
 	if (type in config.custom_types) {
 		var custom = config.custom_types[type];
 		if (custom.inline)
-			return type_tag(custom.type) + muted('(' + custom.name + ')');
+			return type_tag(custom.type) + (custom.name ? muted('(' + custom.name + ')') : '');
 		else
 			return '<a href="#custom-type-' + type + '" class="custom-type">' + custom.name + '</a>';
 	}
@@ -82,7 +82,7 @@ module.exports = {
 			}
 			var custom_type = config.custom_types[obj];
 			if (custom_type && custom_type.inline)
-				return stringify(custom_type.type, indent) + muted(' (' + custom_type.name + ')');
+				return stringify(custom_type.type, indent) + (custom_type.name ? muted(' (' + custom_type.name + ')') : '');
 			return is_valued ? value_tag(obj) : type_tag(obj);
 		}
 		return stringify(obj, '');
