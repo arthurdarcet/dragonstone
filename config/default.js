@@ -14,6 +14,7 @@ module.exports = {
 					name: 'name',
 					description: 'The name of the requested user',
 					required: true,
+					test_value: 'braboule',
 					type: 'string'
 				}],
 				response_code: {
@@ -43,6 +44,7 @@ module.exports = {
 					name: 'slug',
 					description: 'The slug of the requested post',
 					required: true,
+					test_value: 'post-1',
 					type: 'string'
 				}],
 				response_code: {
@@ -67,8 +69,8 @@ module.exports = {
 					name: 'category',
 					description: 'The category of the post',
 					required: false,
-					default: 'misc',
-					type: 'string'
+					default: 'python',
+					type: 'post_category'
 				}],
 				response_code: {
 					201: 'A post was created',
@@ -90,6 +92,10 @@ module.exports = {
 			inline: true,
 			type: 'string'
 		},
+		post_category: {
+			inline: true,
+			type: 'js|python|cpp'
+		},
 		user: {
 			name: 'A user',
 			type: {
@@ -105,7 +111,8 @@ module.exports = {
 				content: 'string',
 				date: 'timestamp',
 				slug: 'string',
-				title: 'string'
+				title: 'string',
+				category: 'post_category'
 			}
 		}
 	}

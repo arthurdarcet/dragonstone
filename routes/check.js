@@ -59,7 +59,7 @@ function check_all(req, cb) {
 			var params = {};
 			if (o.method.parameters) {
 				o.method.parameters.map(function(param) {
-					if (param.testing) params[param.name] = param.testing;
+					if (param.test_value) params[param.name] = param.test_value;
 				});
 			}
 			call.call({
