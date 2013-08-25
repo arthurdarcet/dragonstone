@@ -10,7 +10,7 @@ config.endpoints.map(function(endpoint) {
 });
 
 var OPTIONAL_KEY = '(optional) ';
-function check(data, q) {
+function check(response, q) {
 	function aux(data, schemas) {
 		if (typeof(schemas) == 'string' && config.custom_types[schemas])
 			return aux(data, config.custom_types[schemas].type);
@@ -55,7 +55,11 @@ function check(data, q) {
 	}
 
 	var method = methods[q.uri];
-	return !method || !method.response || aux(data, method.response);
+	if (!method || !method.responses)
+		return true;
+
+	var schemas = method.responses[response.status] || method.responses[('' + response.status)[0] + 'xx'] || method.responses.xxx;
+	return !schemas || aux(response.data, schemas)
 }
 
 function check_all(req, cb) {
@@ -77,13 +81,10 @@ function check_all(req, cb) {
 				base_url: req.query.base_url,
 				uri: o.uri,
 				params: params
-			}, function(err, data) {
-				data.uri = o.uri;
-				if (err)
-					data.error = err;
-				else
-					data.check = check(data.data, o);
-				cb(null, data);
+			}, function(_, response) {
+				response.uri = o.uri;
+				response.check = check(response, o);
+				cb(null, response);
 			})
 		}, cb);
 	}, function(_, results) {

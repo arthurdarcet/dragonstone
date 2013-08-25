@@ -17,11 +17,10 @@ module.exports = {
 					test_value: 'braboule',
 					type: 'string'
 				}],
-				response_code: {
-					200: 'A user was returned',
-					404: 'No user with this name exists'
-				},
-				response: 'user'
+				responses: {
+					200: 'user',
+					404: 'error'
+				}
 			}
 		}
 	}, {
@@ -32,10 +31,12 @@ module.exports = {
 				description: 'List all available posts',
 				auth_required: false,
 				response_code: 200,
-				response: [{
-					slug: 'string',
-					url: 'url'
-				}]
+				responses: {
+					200: [{
+						slug: 'string',
+						url: 'url'
+					}]
+				}
 			},
 			'GET /{slug}': {
 				description: 'Get a specific post',
@@ -47,11 +48,10 @@ module.exports = {
 					test_value: 'post-1',
 					type: 'string'
 				}],
-				response_code: {
-					200: 'A post was returned',
-					404: 'No post with this slug exists'
-				},
-				response: 'post'
+				responses: {
+					200: 'post',
+					404: 'error'
+				}
 			},
 			'POST /': {
 				auth_required: true,
@@ -72,12 +72,10 @@ module.exports = {
 					default: 'python',
 					type: 'post_category'
 				}],
-				response_code: {
-					201: 'A post was created',
-					400: 'Client error',
-					500: 'Server error'
-				},
-				response: {slug: '(optional) string', message: '(optional) string'}
+				responses: {
+					201: {slug: 'string'},
+					'4xx': 'error'
+				}
 			}
 		}
 	}],
@@ -95,6 +93,10 @@ module.exports = {
 		post_category: {
 			inline: true,
 			type: 'js|python|cpp'
+		},
+		error: {
+			inline: true,
+			type: {message: 'string'}
 		},
 		user: {
 			name: 'A user',

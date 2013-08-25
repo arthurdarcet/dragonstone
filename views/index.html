@@ -48,23 +48,12 @@
 					</table>
 				</dd>
 				{% endif %}
-				<dt class="list-group-item">Response code:</dt>
+				{% for response in method.responses %}
+				<dt class="list-group-item">Response <span="response-code">{{ loop.key }}</span>:</dt>
 				<dd class="list-group-item">
-					{% if method.response_code.toFixed %}
-					{# The response code is an int #}
-					<span class="response-code">{{ method.response_code }}</span>
-					{% else %}
-					{% for description in method.response_code %}
-					<span class="response-code">{{ loop.key }}</span>: {{ description }}<br>
-					{% endfor %}
-					{% endif %}
+					<div class="object">{{ response|object|raw }}</div>
 				</dd>
-				<dt class="list-group-item">Response:</dt>
-				<dd class="list-group-item">
-					<div class="object">
-						{{ method.response|object|raw }}
-					</div>
-				</dd>
+				{% endfor %}
 				<dt class="list-group-item hide test-result">
 					<i class="glyphicon glyphicon-ok test-result-valid hide"></i>
 					<i class="glyphicon glyphicon-warning-sign test-result-invalid hide"></i>

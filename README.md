@@ -24,8 +24,7 @@ Object with the following attributes:
   - `required`
   - `type`: a `<Parameter>`
   - `default`: the value the API will default to if the parameter isn't supplied
- - `reponse`: object`<Object>`
- - `response_code`: `200` or `{"200": "description", "303": "…"}`
+ - `reponses`: object `{<CODE>: <Object>, …}` where `<CODE>` is of the form `200`, `3xx`, `41x`, `xxx` (`<CODE>` match `[0-9x]{3}`)
 
 #### Parameter
 One of the following:

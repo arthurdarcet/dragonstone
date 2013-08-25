@@ -18,15 +18,10 @@ function call(options, cb) {
 	request(method, (options.base_url || config.base_url) + url)
 	.send(options.params)
 	.end(function(response) {
-		if (response.ok) {
-			cb(null, {
-				status: response.status,
-				data: response.body
-			});
-		}
-		else {
-			cb(response.text, {status: response.status});
-		}
+		cb(null, {
+			status: response.status,
+			data: response.body
+		});
 	});
 }
 
@@ -35,11 +30,11 @@ module.exports = function(req, res) {
 	if (!req.query.uri) {
 		return res.send(400, 'Missing URI');
 	}
-	call(req.query, function(err, response) {
-		res.send(response.status || 400, err || {
+	call(req.query, function(_, response) {
+		res.send(response.status, {
 			data: filters.object(response.data, true),
 			status: response.status,
-			valid: check.check(response.data, req.query)
+			valid: check.check(response, req.query)
 		});
 	});
 };
