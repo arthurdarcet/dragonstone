@@ -1,6 +1,8 @@
 var express = require('express');
-var router = new express.Router();
+var config = require('../config');
 
+
+var router = new express.Router();
 
 router.get('/users/:slug', function(req, res) {
 	res.send({
@@ -10,20 +12,16 @@ router.get('/users/:slug', function(req, res) {
 		name: 'User ' + req.params.slug
 	});
 });
-
-function post(i) {
-	return {content: 'content post ' + i, date: 1377451842 - 1000*i, slug: 'post-' + i, title: 'Post ' + i};
-}
-
 router.get('/posts', function(req, res) {
-	res.send([post(0), post(1), post(2), post(3)]);
+	function d(i) { return {slug: 'post-' + i, url: config.base_url + '/posts/post-' + i}; }
+	res.send([0, 1, 2, 3].map(d));
 });
 router.get('/posts/:slug', function(req, res) {
 	var i = req.params.slug[5];
 	if (!/^post-[0-9]$/.test(req.params.slug) || i > 3) 
 		res.send(404, {});
 	else
-		res.send(post(i));
+		res.send({content: 'content post ' + i, date: 1377451842 - 1000*i, slug: 'post-' + i, title: 'Post ' + i});
 });
 router.post('/posts', function(req, res) {
 	res.send(500, {message: 'Not implemented'});

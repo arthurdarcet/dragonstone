@@ -1,5 +1,8 @@
 var request = require('superagent');
+var check = require('./check');
 var config = require('../config');
+var filters = require('../filters');
+
 
 var URL_VAR_MATCH = /{[^{}]+}/g;
 
@@ -20,7 +23,11 @@ module.exports = function(req, res) {
 		.send(params)
 		.end(function(response) {
 			if (response.ok) {
-				res.render('call', response);
+				res.send({
+					data: filters.object(response.body, true),
+					status: response.status,
+					valid: check.validate_response(response.body, req.query)
+				});
 			}
 			else {
 				res.send(response.status, response.text);

@@ -71,7 +71,11 @@
 						{{ method.response|object|raw }}
 					</div>
 				</dd>
-				<dt class="list-group-item hide test-result">Results:</dt>
+				<dt class="list-group-item hide test-result">
+					<i class="glyphicon glyphicon-ok test-result-valid hide"></i>
+					<i class="glyphicon glyphicon-warning-sign test-result-invalid hide"></i>
+					Results: <span class="response-code"></span>
+				</dt>
 				<dd class="list-group-item hide test-result">
 					<div class="object test-result-data"></div>
 					<div class="test-result-error alert alert-danger"></div>
@@ -108,7 +112,8 @@
 			var data_el = endpoint.find('.test-result-data').hide();
 			var error_el = endpoint.find('.test-result-error').hide();
 			var loading_el = endpoint.find('.test-result-loading').show();
-			endpoint.find('.test-result').removeClass('hide');
+			var header = endpoint.find('.test-result').removeClass('hide');
+			var response_code = header.find('.response-code').html('');
 
 			var params = {};
 			endpoint.find('input').each(function() {
@@ -125,7 +130,15 @@
 				loading_el.hide();
 				if (status == 'success') {
 					data_el.show();
-					data_el.html(data);
+					data_el.html(data.data);
+					response_code.html(data.status);
+					if (data.valid) {
+						header.find('.test-result-invalid').addClass('hide');
+						header.find('.test-result-valid').removeClass('hide');
+					} else {
+						header.find('.test-result-valid').addClass('hide');
+						header.find('.test-result-invalid').removeClass('hide');
+					}
 				}
 				else {
 					error_el.show();
