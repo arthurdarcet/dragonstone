@@ -11,10 +11,6 @@ function value_tag(value) {
 function type_tag(type) {
 	if (['int', 'float', 'string', 'bool'].indexOf(type) != -1)
 		return '<span class="base-type">' + type + '</span>';
-
-	if (type.indexOf('|') > 0)
-		return '<span class="enumerated-type">enumerated</span> ' + muted('(' + type.split('|').join(', ') + ')');
-
 	if (type in config.custom_types) {
 		var custom = config.custom_types[type];
 		if (custom.inline)
@@ -22,7 +18,31 @@ function type_tag(type) {
 		else
 			return '<a href="#custom-type-' + type + '" class="custom-type">' + custom.name + '</a>';
 	}
+	if (type.indexOf('|') != -1)
+		return '<span class="enumerated-type">enumerated</span> ' + muted('(' + type.split('|').join(', ') + ')');
 	return '<span class="unknown-type">' + type + '</span>';
+}
+
+function value_input(parameter) {
+	if (parameter.type in config.custom_types) {
+		parameter.type = config.custom_types[parameter.type].type;
+		return value_input(parameter);
+	}
+	var attr = 'class="form-control input-sm" name="' + parameter.name + '"';
+	if (parameter.type == 'bool')
+		return '<input type="checkbox" ' + (parameter.default ? 'checked ' : '' ) + attr + '>';
+	if (parameter.type.indexOf('|') != -1) {
+		var select = '<select ' + attr + '>';
+		var vals = parameter.type.split('|');
+		if (!parameter.required && !parameter.default) {
+			parameter.default = '';
+			vals.shift('');
+		}
+		for (var i in vals)
+			select += '<option value="' + vals[i] + '" ' + (parameter.default == vals[i] ? 'selected' : '') + '>' + vals[i] + '</option>';
+		return select + '</select>';
+	}
+	return '<input ' + attr + ' placeholder="' + (parameter.default || '') + '">';
 }
 
 module.exports = {
@@ -34,19 +54,7 @@ module.exports = {
 		return type_tag(parameter.type);
 	},
 	value: function(parameter) {
-		var attr = ' class="form-control input-sm" name="' + parameter.name + '"';
-		if (parameter.type == 'bool')
-			return '<input type="checkbox" ' + (parameter.default ? 'checked ' : '' ) + attr + '>';
-		if (parameter.type.indexOf('|') > 0) {
-			var select = '<select ' + attr + '>';
-			if (!parameter.required)
-				select += '<option value=""></option>';
-			var vals = parameter.split('|');
-			for (var i in vals)
-				select += '<option value="' + vals[i] + '">' + vals[i] + '</option>';
-			return select + '</select>';
-		}
-		return '<input ' + attr + ' placeholder="' + (parameter.default || '') + '">';
+		return value_input(parameter);
 	},
 	object: function(obj, is_valued) {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';
