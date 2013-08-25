@@ -1,11 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}{{ name }}{% endblock %}
-
 {% block content %}
-<div class="page-header">
-	<h1>{{ name }} <small class="pull-right">Base URL: <a href="{{ base_url }}">{{ base_url }}</a></small></h1>
-</div>
 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	{% for endpoint in endpoints %}
 	<li class="{% if loop.first %}active{% endif %}"><a href="#{{ endpoint.name }}" data-toggle="tab">{{ endpoint.name}}</a></li>

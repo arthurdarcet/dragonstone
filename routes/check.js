@@ -41,7 +41,7 @@ function check(data, q) {
 	return method && (!method.response || aux(data, method.response));
 }
 
-module.exports = function(req, res) {
+function check_all(req, cb) {
 	var call = require('./call');
 	var base_url = req.query.base_url || config.base_url;
 	async.map(config.endpoints, function(endpoint, cb) {
@@ -61,7 +61,7 @@ module.exports = function(req, res) {
 				uri: o.uri,
 				params: params
 			}, function(err, data) {
-				data.method = o.method;
+				data.uri = o.uri;
 				if (err)
 					data.error = err;
 				else
@@ -74,7 +74,15 @@ module.exports = function(req, res) {
 		results.map(function(res) {
 			res.map(function(r) { out.push(r); });
 		})
-		res.send(out);
+		cb(out);
+	});
+}
+module.exports = function(req, res) {
+	check_all(req, function(data) {
+		if (req.params.output == 'html')
+			res.render('check', {data: data});
+		else
+			res.send(data);
 	});
 }
 

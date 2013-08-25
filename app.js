@@ -28,10 +28,12 @@ if (cluster.isMaster) {
 	if (config.debug) {
 		app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 	}
+	app.set('name', config.name);
+	app.set('base_url', config.base_url);
 
 	app.get('/', routes.show);
 	app.get('/call', routes.call);
-	app.get('/check.json', routes.check);
+	app.get('/check.:output(json|html)?', routes.check);
 	app.use('/test-api', routes.test_api);
 	
 	app.listen(config.listen.port, config.listen.host);
