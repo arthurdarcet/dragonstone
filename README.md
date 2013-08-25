@@ -10,7 +10,7 @@ Override the default settings by defining them in `config/local.js`
  - `base_url`
  - `auth`
  - `endpoints`: list of `{"name": "…", "prefix": "…", "methods": {"<VERB> URI": <Method>, …}}` with `VERB` being an `HTTP` verb (`GET`, `POST`, …)
- - `custom_types`: object of `{id: <Custom type>}`
+ - `custom_types`: `{id: <Custom type>, …}`
 
 #### Method
 Object with the following attributes:
@@ -24,14 +24,14 @@ Object with the following attributes:
   - `required`
   - `type`: a `<Parameter>`
   - `default`: the value the API will default to if the parameter isn't supplied
- - `reponse`: `<Object>`
+ - `reponse`: object`<Object>`
  - `response_code`: `200` or `{"200": "description", "303": "…"}`
 
 #### Parameter
 One of the following:
  - `int`, `float`, `string` or `bool`
  - `"value1|value2|…"`
- - Custom type id
+ - `<custom type id>`
 
 
 #### Object
