@@ -25,7 +25,7 @@ Object with the following attributes:
   - `type`: a `<Parameter>`
   - `default`: the value the API will default to if the parameter isn't supplied
  - `reponse`: `<Object>`
- - `responseCode`: `200` or `{"200": "description", "303": "…"}`
+ - `response_code`: `200` or `{"200": "description", "303": "…"}`
 
 #### Parameter
 One of the following:

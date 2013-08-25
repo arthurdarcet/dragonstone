@@ -1,7 +1,7 @@
 var config = require('./config');
 
 function type_tag(type) {
-	if (['int', 'float', 'string', 'bool'].indexOf(type) > 0)
+	if (['int', 'float', 'string', 'bool'].indexOf(type) != -1)
 		return '<span class="base-type">' + type + '</span>';
 
 	if (type.indexOf('|') > 0)
@@ -20,11 +20,11 @@ module.exports = {
 		return type_tag(parameter.type);
 	},
 	value: function(parameter) {
-		var name = 'name="' + parameter.name + '"';
+		var attr = ' class="form-control input-sm" name="' + parameter.name + '"';
 		if (parameter.type == 'bool')
-			return '<input type="checkbox" ' + (parameter.default ? 'checked ' : '' ) + name + '>';
+			return '<input type="checkbox" ' + (parameter.default ? 'checked ' : '' ) + attr + '>';
 		if (parameter.type.indexOf('|') > 0) {
-			var select = '<select ' + name + '>';
+			var select = '<select ' + attr + '>';
 			if (!parameter.required)
 				select += '<option value=""></option>';
 			var vals = parameter.split('|');
@@ -32,7 +32,7 @@ module.exports = {
 				select += '<option value="' + vals[i] + '">' + vals[i] + '</option>';
 			return select + '</select>';
 		}
-		return '<input ' + name + ' placeholder="' + (parameter.default || '') + '">';
+		return '<input ' + attr + ' placeholder="' + (parameter.default || '') + '">';
 	},
 	object: function(obj) {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -48,7 +48,7 @@ module.exports = {
 				if (obj.length > 2) {
 					length = obj[2] + ' ≤ ' + length;
 				}
-				return res + '<span class="muted">' + length + '</span>' + ' ]';
+				return res + '<span class="text-muted">' + length + '</span>' + ' ]';
 			}
 			if (obj instanceof Object) {
 				var res = indent + "{<br>";
@@ -58,7 +58,7 @@ module.exports = {
 				return res.slice(0, -5) + "<br>" + indent + "}";
 			}
 			if (obj.indexOf && obj.indexOf(OPTIONAL_KEY) === 0) {
-				return '<span class="muted">' + OPTIONAL_KEY + '</span>' + stringify(obj.slice(OPTIONAL_KEY.length));
+				return '<span class="text-muted">' + OPTIONAL_KEY + '</span>' + stringify(obj.slice(OPTIONAL_KEY.length));
 			}
 			var custom_type = config.custom_types[obj];
 			if (custom_type && custom_type.inline) {

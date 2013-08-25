@@ -1,0 +1,49 @@
+.object {
+	background-color: white;
+	border: 1px solid black;
+	padding: 10px;
+}
+
+.custom-type, .base-type, .enumerated-type, .response-code, .uri, .verb {
+	font-family: monospace;
+}
+.custom-type {
+	cursor: pointer;
+	text-decoration: underline;
+	color: rgb(100, 100, 200);
+}
+.base-type, .response-code {
+	color: rgb(120, 170, 40)
+}
+
+.uri {
+
+}
+.verb {
+
+}
+.auth_required {
+	float: right;
+}
+
+dd.list-group-item  {
+	border: 0;
+	margin-bottom: 23px;
+}
+.table {
+	margin-bottom: 0;
+}
+
+.category {
+	border-bottom: 1px solid #F0F0F0;
+	font-size: 25px;
+	margin-bottom: 30px;
+}
+.category span {
+	position: relative;
+	top: 17px;
+	color: #666;
+	margin-left: 40px;
+	background-color: white;
+	padding: 0 15px;
+}

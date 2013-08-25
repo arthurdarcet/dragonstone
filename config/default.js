@@ -17,7 +17,7 @@ module.exports = {
 				required: true,
 				type: 'string'
 			}],
-			responseCode: {
+			response_code: {
 				200: 'A user was returned',
 				404: 'No user with this name exists'
 			},
@@ -31,7 +31,7 @@ module.exports = {
 			verb: 'GET',
 			URI: '',
 			auth_required: false,
-			responseCode: 200,
+			response_code: 200,
 			response: [{
 				slug: 'string',
 				url: 'url'
@@ -47,7 +47,7 @@ module.exports = {
 				required: true,
 				type: 'string'
 			}],
-			responseCode: {
+			response_code: {
 				200: 'A post was returned',
 				404: 'No post with this slug exists'
 			},
@@ -73,7 +73,7 @@ module.exports = {
 				default: 'misc',
 				type: 'string'
 			}],
-			responseCode: {
+			response_code: {
 				201: 'A post was created',
 				400: 'Something went wrong'
 			},

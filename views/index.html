@@ -1,91 +1,87 @@
 {% extends "layout.html" %}
 
-{% block content %}
-<h1>{{ name }}</h1>
-<h6>Base URL: <a href="{{ base_url }}">{{ base_url }}</a></h6>
+{% block title %}{{ name }}{% endblock %}
 
-<h4>Endpoints</h4>
-<ul class="endpoints">
+{% block content %}
+<div class="page-header">
+	<h1>{{ name }} <small class="pull-right">Base URL: <a href="{{ base_url }}">{{ base_url }}</a></small></h1>
+</div>
+
+<dl>
 	{% for endpoint in endpoints %}
-	<li>
-		<span class="name">{{ endpoint.name }}</span>
-		<ul>
-			{% for method in endpoint.methods %}
-			<li class="method">
-				<div class="header">
-					<span class="verb">{{ method.verb }}</span>
-					<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>
-					<span class="description">{{ method.description }}</span>
-					{% if method.auth_required %}
-					<span class="auth_required">Auth required</span>
+	<dt class="category"><span>{{ endpoint.name }}:</span></dt>
+	{% for method in endpoint.methods %}
+	<dd class="panel panel-default">
+		<div class="panel-heading">
+			{% if method.auth_required %}
+			<span class="auth_required">Auth required</span>
+			{% endif %}
+			<span class="verb">{{ method.verb }}</span>
+			<span class="uri">{{ endpoint.prefix}}{{ method.URI }}</span>{% if method.description %}:{% endif %} 
+			<span class="text-muted">{{ method.description }}</span>
+		</div>
+		<dl class="list-group">
+			<dt class="list-group-item">Parameters:</dt>
+			<dd class="list-group-item">
+				<form role="form">
+					{% if method.parameters %}
+					<table class="table">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Key</th>
+								<th>Value</th>
+								<th>Type</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for parameter in method.parameters %}
+							<tr>
+								<td {% if parameter.required %}class="required"{% endif %}></td>
+								<td>{{ parameter.name }}</td>
+								<td>{{ parameter|value|raw }}</td>
+								<td>{{ parameter|type|raw }}</td>
+								<td>{{ parameter.description }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{% else %}
+					<span class="text-muted">None</span>
 					{% endif %}
-				</div>
-				<table class="parameters">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Parameter</th>
-							<th>Value</th>
-							<th>Type</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for parameter in method.parameters %}
-						<tr>
-							<td {% if parameter.required %}class="required"{% endif %}></td>
-							<td>{{ parameter.name }}</td>
-							<td>{{ parameter|value|raw }}</td>
-							<td>{{ parameter|type|raw }}</td>
-							<td>{{ parameter.description }}</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<table class="response-codes">
-					<thead>
-						<tr>
-							<th colspan="2">Response Codes:</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% if method.responseCode.toFixed %}
-						{# The response Code is an int #}
-						<tr>
-							<td>{{ method.responseCode }}</td>
-							<td></td>
-						</tr>
-						{% else %}
-						{% for description in method.responseCode %}
-						<tr>
-							<td>{{ loop.key }}: </td>
-							<td>{{ description }}</td>
-						</tr>
-						{% endfor %}
-						{% endif %}
-					</tbody>
-				</table>
+				</form>
+			</dd>
+			<dt class="list-group-item">Response code:</dt>
+			<dd class="list-group-item">
+				{% if method.response_code.toFixed %}
+				{# The response code is an int #}
+				<span class="response-code">{{ method.response_code }}</span>
+				{% else %}
+				{% for description in method.response_code %}
+				<span class="response-code">{{ loop.key }}</span>: {{ description }}<br>
+				{% endfor %}
+				{% endif %}
+			</dd>
+			<dt class="list-group-item">Response:</dt>
+			<dd class="list-group-item">
 				<div class="object">
 					{{ method.response|object|raw }}
 				</div>
 			</li>
-			{% endfor %}
-		</ul>
-	</li>
+		</dl>
+	</dd>
 	{% endfor %}
-</ul>
-
-<h4>Custom types</h4>
-<ul>
+	{% endfor %}
+	<dt class="category"><span>Custom types:</span></dt>
 	{% for type in custom_types %}
 	{% if not type.inline %}
-	<li id="custom-type-{{ type.id }}">
-		<span class="name">{{ type.name }}</span>
-		<div class="object">
-			{{ type.type|object|raw }}
-		</div>
-	</li>
+	<dd id="custom-type-{{ type.id }}" class="panel panel-default">
+		<div class="panel-heading">{{ type.name }}</div>
+		<div class="panel-body">{{ type.type|object|raw }}</div>
+	</dd>
 	{% endif %}
 	{% endfor %}
-</ul>
+</dl>
+
 {% endblock %}
