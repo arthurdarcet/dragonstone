@@ -21,7 +21,6 @@ module.exports = {
 				parameters: {
 					name: {
 						description: 'The name of the requested user',
-						required: true,
 						test_value: 'braboule',
 						type: 'string'
 					}
@@ -53,7 +52,6 @@ module.exports = {
 				parameters: {
 					slug: {
 						description: 'The slug of the requested post',
-						required: true,
 						test_value: 'post-1',
 						type: 'string'
 					}

@@ -5,18 +5,16 @@ Live demo [here](http://dragonstone.darcet.fr)
 
 ### Config
 Override the default settings by defining them in `config/local.js`
- - `listen`: `{host: "127.0.0.1", port: 1111}`
+ - `listen`: `{host: '127.0.0.1', port: 1111}`
  - `name`
  - `base_url`
  - `auth`
- - `endpoints`: list of `{"name": "…", "prefix": "…", "methods": {"<VERB> URI": <Method>, …}}` with `VERB` being an `HTTP` verb (`GET`, `POST`, …)
+ - `endpoints`: list of `{name: …, prefix: …, methods: {'<VERB> URI': <Method>, …}}` with `VERB` being an `HTTP` verb (`GET`, `POST`, …) and `URI` an API endpoint. Ex: `GET /users/{name}`
  - `custom_types`: `{id: <Custom type>, …}`
 
 #### Method
 Object with the following attributes:
  - `description`
- - `verb`
- - `URI` (ex: `/users/{name}` where `name` is the name of one of the parameters)
  - `auth_required`
  - `parameters`: object of the form `{<NAME>: <Parameter>, …}`
  - `reponses`: object `{<CODE>: <Object>, …}` where `<CODE>` is of the form `200`, `3xx`, `41x`, `xxx` (`<CODE>` match `[0-9x]{3}`)
@@ -24,8 +22,9 @@ Object with the following attributes:
 #### Parameter
 Object with the following attributes:
  - `description`
- - `required`
+ - `required` (default `false`, will be changed to `true` if the parameter is in the `URI`)
  - `type`: a `<Parameter type>`
+ - `testing_value`: the value used when generating the `check.{html,json}` pages
  - `default`: the value the API will default to if the parameter isn't supplied
 
 #### Parameter type
@@ -34,12 +33,12 @@ One of the following:
  - `"value1|value2|…"`
  - `<custom type id>`
 
-
 #### Object
 One of the following:
- - `(optional) <Object>`
- - `{"key": <Object>, …}`
+ - `{key: <Object>, …}`
  - `[<Object>]`, `[<Object>, size_max]` or `[<Object>, size_max, size_min]`
+ - `(optional) <Parameter type>`
+ - `<Parameter type> (description)`
  - `<Parameter type>`
 
 #### Custom type
