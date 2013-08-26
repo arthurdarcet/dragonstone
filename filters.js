@@ -62,30 +62,29 @@ module.exports = {
 		function stringify(obj, indent) {
 			if (!obj) return '';
 			if (obj instanceof Array) {
-				var res = "[";
 				if (is_valued) {
-					res += obj.map(function(o) { return stringify(o, indent) }).join(', ');
+					return '[' + obj.map(function(o) { return stringify(o, indent) }).join(', ') + ']';
 				}
 				else {
-					res += indent + stringify(obj[0], indent) + ", ";
-					var length = '…';
+					var res = '[' + stringify(obj[0], indent) + ', …]';
+					var length;
 					if (obj.length > 1) {
 						length = 'len ≤ ' + obj[1] + ' ';
 					}
 					if (obj.length > 2) {
 						length = obj[2] + ' ≤ ' + length;
 					}
-					res += muted(length);
+					if (length)
+						res += ' ' + muted(length);
+					return res;
 				}
-				return res + ']';
 			}
 			if (obj instanceof Object) {
-				var res = indent + "{<br>";
 				var objects = [];
 				for (var key in obj) {
 					objects.push(indent + INDENT + '<span class="key">' + key + '</span>' + ': ' + stringify(obj[key], indent + INDENT));
 				}
-				return indent + '{<br>' + objects.join(',<br>') + '<br>' + indent + '}';
+				return '{<br>' + objects.join(',<br>') + '<br>' + indent + '}';
 			}
 			if (obj.indexOf && obj.indexOf(OPTIONAL_KEY) === 0) {
 				return muted(OPTIONAL_KEY) + stringify(obj.slice(OPTIONAL_KEY.length));

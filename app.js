@@ -34,6 +34,8 @@ if (cluster.isMaster) {
 	app.use(function(req, res, next) {
 		if(req.query.token)
 			app.set('token', req.query.token || '');
+		else
+			app.set('token', null);
 		next();
 	});
 	
