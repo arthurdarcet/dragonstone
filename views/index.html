@@ -155,10 +155,10 @@
 				}
 			}).always(function(data, status, error) {
 				loading_el.hide();
+				response_code.html(data.status);
 				if (status == 'success') {
 					data_el.show();
 					data_el.html(data.data);
-					response_code.html(data.status);
 					if (data.valid) {
 						header.find('.test-result-invalid').addClass('hide');
 						header.find('.test-result-valid').removeClass('hide');

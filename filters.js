@@ -81,10 +81,11 @@ module.exports = {
 			}
 			if (obj instanceof Object) {
 				var res = indent + "{<br>";
+				var objects = [];
 				for (var key in obj) {
-					res += indent + INDENT + '<span class="key">' + key + '</span>' + ': ' + stringify(obj[key], indent + INDENT) + ",<br>";
+					objects.push(indent + INDENT + '<span class="key">' + key + '</span>' + ': ' + stringify(obj[key], indent + INDENT));
 				}
-				return res.slice(0, -5) + "<br>" + indent + "}";
+				return indent + '{<br>' + objects.join(',<br>') + '<br>' + indent + '}';
 			}
 			if (obj.indexOf && obj.indexOf(OPTIONAL_KEY) === 0) {
 				return muted(OPTIONAL_KEY) + stringify(obj.slice(OPTIONAL_KEY.length));
