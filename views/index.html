@@ -3,7 +3,7 @@
 {% block content %}
 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 	{% for endpoint in endpoints %}
-	<li class="{% if loop.first %}active{% endif %}"><a href="#{{ endpoint.name }}" data-toggle="tab">{{ endpoint.name}}</a></li>
+	<li class="{% if loop.first %}active{% endif %}"><a href="#{{ endpoint.id }}" data-toggle="tab">{{ endpoint.name}}</a></li>
 	{% endfor %}
 	<li class="pull-right"><a id="go-to-custom-types" href="#custom-types" data-toggle="tab">Custom types</a></li>
 </ul>
@@ -28,7 +28,7 @@
 {% endif %}
 <div class="tab-content">
 	{% for endpoint in endpoints %}
-	<div class="tab-pane {% if loop.first %}active{% endif %}" id="{{ endpoint.name }}">
+	<div class="tab-pane {% if loop.first %}active{% endif %}" id="{{ endpoint.id }}">
 		{% for method in endpoint.methods %}
 		<div class="panel panel-default">
 			<div class="panel-heading">

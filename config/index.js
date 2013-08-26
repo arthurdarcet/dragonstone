@@ -13,6 +13,7 @@ config.endpoints.map(function(endpoint) {
 	for (var key in endpoint.methods)
 		methods[key.split(' ')[0] + ' ' + prefix + key.split(' ').slice(1).join(' ')] = endpoint.methods[key];
 	endpoint.methods = methods;
+	endpoint.id = endpoint.name.replace(/[^a-z0-9]/ig, '-');
 });
 
 module.exports = config;
