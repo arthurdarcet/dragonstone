@@ -34,7 +34,7 @@ dd.list-group-item  {
 	border: 0;
 	margin-bottom: 23px;
 }
-.table, .alert {
+.table, .test-result .alert {
 	margin-bottom: 0;
 }
 

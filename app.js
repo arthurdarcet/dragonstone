@@ -28,11 +28,18 @@ if (cluster.isMaster) {
 	if (config.debug) {
 		app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 	}
-	app.set('name', config.name);
+	app.set('auth', config.auth);
 	app.set('base_url', config.base_url);
-
+	app.set('name', config.name);
+	app.use(function(req, res, next) {
+		if(req.query.token)
+			app.set('token', req.query.token || '');
+		next();
+	});
+	
 	app.get('/', routes.show);
-	app.get('/call', routes.call);
+	app.post('/auth', routes.auth);
+	app.post('/call', routes.call);
 	app.get('/check.:output(json|html)?', routes.check);
 	app.use('/test-api', routes.test_api);
 	

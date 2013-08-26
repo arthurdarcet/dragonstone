@@ -1,19 +1,18 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<dl>
-	{% for res in data %}
-	<div class="panel panel-{% if res.error %}warning{% else if res.check %}success{% else %}danger{% endif %}">
-		<div class="panel-heading">{{ res.uri }}</div>
-		<div class="panel-body">
-			{% if res.error %}
-			{{ res.error }}
-			{% else if res.check %}
-			Valid response
-			{% else %}
-			Invalid structure
-			{% endif %}
-		</div>
+{% for res in data %}
+<div class="panel panel-{% if res.error %}warning{% else if res.check %}success{% else %}danger{% endif %}">
+	<div class="panel-heading">{{ res.uri }}</div>
+	<div class="panel-body">
+		{% if res.error %}
+		{{ res.error }}
+		{% else if res.check %}
+		Valid response
+		{% else %}
+		Invalid structure
+		{% endif %}
 	</div>
-	{% endfor %}
+</div>
+{% endfor %}
 {% endblock %}

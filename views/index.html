@@ -7,6 +7,25 @@
 	{% endfor %}
 	<li class="pull-right"><a id="go-to-custom-types" href="#custom-types" data-toggle="tab">Custom types</a></li>
 </ul>
+{% if settings.auth %}
+<div class="auth-form alert alert-warning alert-dismissable {% if settings.token %}hide{% endif %}">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<div class="auth-error hide"></div>
+	<form class="form-inline" action="/auth">
+		{% for field in settings.auth.fields %}
+		<div class="form-group">
+			<label class="sr-only" for="{{ field }}">{{ field }}</label>
+			<input class="form-control" name="{{ field }}" type="{% if field == 'password' %}password{% else %}text{% endif %}" placeholder="{{ field }}">
+		</div>
+		{% endfor %}
+		<button class="btn btn-default auth-submit">Login</button>
+	</form>
+</div>
+<div class="auth-success alert alert-success alert-dismissable {% if !settings.token %}hide{% endif %}">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	Token: <span class="token">{{ settings.token }}</span>
+</div>
+{% endif %}
 <div class="tab-content">
 	{% for endpoint in endpoints %}
 	<div class="tab-pane {% if loop.first %}active{% endif %}" id="{{ endpoint.name }}">
@@ -90,6 +109,28 @@
 		$('.custom-type').click(function(evt) {
 			$('#go-to-custom-types').click();
 		});
+		$('.auth-submit').click(function(evt) {
+			evt.preventDefault();
+			var params = {};
+			$('.auth-form input').each(function() {
+				if (this.value) params[this.name] = this.value;
+			});
+			$.ajax({
+				url: '/auth',
+				method: 'POST',
+				data: params
+			}).always(function(data, status, error) {
+				if (status == 'success') {
+					$('.token').html(data.access_token);
+					$('.auth-form, .auth-success').toggleClass('hide');
+					if (window.history)
+						window.history.pushState({}, '', '?token=' + data.access_token);
+				}
+				else {
+					$('.auth-error').removeClass('hide').html(error);
+				}
+			})
+		});
 		$('.test-endpoint').click(function(evt) {
 			var endpoint = $(evt.currentTarget).parent().parent();
 			var data_el = endpoint.find('.test-result-data').hide();
@@ -102,11 +143,15 @@
 			endpoint.find('input').each(function() {
 				if (this.value) params[this.name] = this.value;
 			});
+			var token = $('.token').html();
+			
 			$.ajax({
 				url: '/call',
+				method: 'POST',
 				data: {
 					uri: endpoint.find('.uri').html(),
 					params: params,
+					token: token
 				}
 			}).always(function(data, status, error) {
 				loading_el.hide();

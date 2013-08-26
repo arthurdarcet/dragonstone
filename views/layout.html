@@ -11,8 +11,8 @@
 		<div class="{% block container %}container{% endblock %}">
 			<div class="page-header">
 				<h1>
-					<a href="/">{{ settings.name }}</a>
-					<small>— <a href="/check.html">Test results</a></small>
+					<a href="/?token={{ settings.token }}">{{ settings.name }}</a>
+					<small>— <a href="/check.html?token={{ settings.token }}">Test results</a></small>
 				</h1>
 			</div>
 			{% block content %}{% endblock %}

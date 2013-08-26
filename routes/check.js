@@ -78,7 +78,8 @@ function check_all(req, cb) {
 			call.call({
 				base_url: req.query.base_url,
 				uri: o.uri,
-				params: params
+				params: params,
+				token: req.query.token
 			}, function(err, response) {
 				response.uri = o.uri;
 				if (err)

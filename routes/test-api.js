@@ -30,7 +30,13 @@ router.get('/posts/:slug', function(req, res) {
 		});
 });
 router.post('/posts', function(req, res) {
-	res.send(500, {message: 'Not implemented'});
+	if (req.headers.authorization != 'Bearer TOKEN')
+		res.send(401, {message: 'Unauthorized'});
+	else
+		res.send(500, {message: 'Not implemented'});
+});
+router.post('/oauth/token', function(req, res) {
+	res.send({access_token: 'TOKEN'});
 });
 
 module.exports = router.middleware;

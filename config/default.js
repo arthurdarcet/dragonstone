@@ -2,7 +2,15 @@ module.exports = {
 	listen: {host: '127.0.0.1', port: 1111},
 	name: 'Example API',
 	base_url: 'http://localhost:1111/test-api',
-	auth: false,
+	auth: {
+		endpoint: 'http://localhost:1111/test-api/oauth/token',
+		extra: {
+			client_id: 'CLIENT_ID',
+			client_secret: 'CLIENT_SECRET',
+			grant_type: 'password'
+		},
+		fields: ['username', 'password']
+	},
 	endpoints: [{
 		name: 'Users',
 		prefix: '/users',
