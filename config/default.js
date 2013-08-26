@@ -37,7 +37,7 @@ module.exports = {
 		prefix: '/posts',
 		methods: {
 			'GET /': {
-				description: 'List all available posts',
+				description: '(deprecated) List all available posts',
 				auth_required: false,
 				response_code: 200,
 				responses: {

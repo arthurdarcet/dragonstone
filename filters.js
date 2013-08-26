@@ -34,10 +34,8 @@ function value_input(parameter, name) {
 	if (parameter.type.indexOf('|') != -1) {
 		var select = '<select ' + attr + '>';
 		var vals = parameter.type.split('|');
-		if (!parameter.required && !parameter.default) {
-			parameter.default = '';
-			vals.unshift('');
-		}
+		if (!parameter.required && !parameter.default)
+			vals.unshift(parameter.default = '');
 		for (var i in vals)
 			select += '<option value="' + vals[i] + '" ' + (parameter.default == vals[i] ? 'selected' : '') + '>' + vals[i] + '</option>';
 		return select + '</select>';
@@ -45,7 +43,17 @@ function value_input(parameter, name) {
 	return '<input ' + attr + ' placeholder="' + (parameter.default || '') + '">';
 }
 
+var FLAGS = {
+	optional: '(optional) ',
+	deprecated: '(deprecated) '
+};
 module.exports = {
+	description: function(str) {
+		if (str.indexOf && str.indexOf(FLAGS.deprecated) === 0)
+			return muted(FLAGS.deprecated) + str.slice(FLAGS.deprecated.length);
+		else
+			return str;
+	},
 	type: function(parameter) {
 		return type_tag(parameter.type);
 	},
@@ -54,37 +62,28 @@ module.exports = {
 	},
 	object: function(obj, is_valued) {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';
-		var OPTIONAL_KEY = '(optional) ';
 		function stringify(obj, indent) {
 			if (!obj) return '';
 			if (obj instanceof Array) {
-				if (is_valued) {
+				if (is_valued)
 					return '[' + obj.map(function(o) { return stringify(o, indent) }).join(', ') + ']';
-				}
-				else {
-					var res = '[' + stringify(obj[0], indent) + ', …]';
-					var length;
-					if (obj.length > 1) {
-						length = 'len ≤ ' + obj[1] + ' ';
-					}
-					if (obj.length > 2) {
-						length = obj[2] + ' ≤ ' + length;
-					}
-					if (length)
-						res += ' ' + muted(length);
-					return res;
-				}
+				
+				var length, res = '[' + stringify(obj[0], indent) + ', …]';
+				if (obj.length > 1) length = 'len ≤ ' + obj[1] + ' ';
+				if (obj.length > 2) length = obj[2] + ' ≤ ' + length;
+				if (length) res += ' ' + muted(length);
+				return res;
 			}
 			if (obj instanceof Object) {
 				var objects = [];
-				for (var key in obj) {
+				for (var key in obj)
 					objects.push(indent + INDENT + '<span class="key">' + key + '</span>' + ': ' + stringify(obj[key], indent + INDENT));
-				}
+				
 				return '{<br>' + objects.join(',<br>') + '<br>' + indent + '}';
 			}
-			if (obj.indexOf && obj.indexOf(OPTIONAL_KEY) === 0) {
-				return muted(OPTIONAL_KEY) + stringify(obj.slice(OPTIONAL_KEY.length));
-			}
+			if (obj.indexOf && obj.indexOf(FLAGS.optional) === 0)
+				return muted(FLAGS.optional) + stringify(obj.slice(FLAGS.optional.length));
+			
 			var custom_type = config.custom_types[obj];
 			if (custom_type && custom_type.inline)
 				return stringify(custom_type.type, indent) + (custom_type.name ? muted(' (' + custom_type.name + ')') : '');

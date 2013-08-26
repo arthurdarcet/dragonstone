@@ -37,7 +37,7 @@
 				{% endif %}
 				<span class="btn btn-default btn-sm pull-right test-endpoint">Try it</span>
 				<span class="uri">{{ loop.key }}</span>{% if method.description %}:{% endif %}
-				<span class="text-muted">{{ method.description }}</span>
+				<span class="text-muted description">{{ method.description|description|raw }}</span>
 			</div>
 			<dl class="list-group">
 				{% if method.parameters %}

@@ -3,7 +3,9 @@
 	border: 1px solid black;
 	padding: 10px;
 }
-
+.description .text-muted {
+	font-style: italic;
+}
 .custom-type, .base-type, .enumerated-type, .response-code, .uri, .verb, .key, .string-value, .boolean-value, .number-value {
 	font-family: monospace;
 }
