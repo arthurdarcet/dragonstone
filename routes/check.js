@@ -16,7 +16,9 @@ function check(response, q) {
 			return aux(data, config.custom_types[schemas].type);
 		if (typeof(schemas) == 'string' && schemas.indexOf(OPTIONAL_KEY) === 0)
 			return aux(data, schemas.slice(OPTIONAL_KEY.length));
-
+		
+		if (!data)
+			return schemas == 'string' || !schemas;
 		if (data instanceof Array) {
 			if (!(schemas instanceof Array))
 				return false;
@@ -33,7 +35,7 @@ function check(response, q) {
 			if (!(schemas instanceof Object))
 				return false;
 			for (var i in data)
-				if (!aux(data[i], schemas[i]))
+				if (schemas[i] && !aux(data[i], schemas[i]))
 					return false
 			for (var i in schemas)
 				if (schemas[i].indexOf(OPTIONAL_KEY) !== 0 && !(i in data))
@@ -47,11 +49,10 @@ function check(response, q) {
 			return schemas == 'bool';
 		if (typeof(data) == schemas)
 			return true;
+		
+		console.assert(typeof(data) == 'string', data);
 
-		console.assert(typeof(data) == 'string');
-		console.assert(typeof(schemas) == 'string');
-
-		return schemas.split('|').indexOf(data) != -1;
+		return typeof(schemas) == 'string' && schemas.split('|').indexOf(data) != -1;
 	}
 
 	var method = methods[q.uri] || {};
