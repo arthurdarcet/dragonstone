@@ -24,6 +24,7 @@ function call(options, cb) {
 		delete options.params[param];
 	}
 	var req = request(method, url);
+	req.type('form');
 	req.send(options.params);
 	if (options.token)
 		req.set('Authorization', 'Bearer ' + options.token);
