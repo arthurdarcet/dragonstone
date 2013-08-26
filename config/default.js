@@ -27,7 +27,7 @@ module.exports = {
 				},
 				responses: {
 					200: 'user',
-					404: 'error'
+					404: 'error (no user with this slug exists)'
 				}
 			}
 		}
@@ -58,7 +58,7 @@ module.exports = {
 				},
 				responses: {
 					200: 'post',
-					404: 'error'
+					404: 'error (Post not found)'
 				}
 			},
 			'POST /': {
@@ -83,7 +83,7 @@ module.exports = {
 				},
 				responses: {
 					201: {slug: 'string'},
-					'4xx': 'error'
+					'4xx': 'error (invalid arguments)'
 				}
 			}
 		}

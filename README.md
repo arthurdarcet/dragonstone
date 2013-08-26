@@ -10,7 +10,7 @@ Override the default settings by defining them in `config/local.js`
  - `base_url`
  - `auth`
  - `endpoints`: list of `{name: …, prefix: …, methods: {'<VERB> URI': <Method>, …}}` with `VERB` being an `HTTP` verb (`GET`, `POST`, …) and `URI` an API endpoint. Ex: `GET /users/{name}`
- - `custom_types`: `{id: <Custom type>, …}`
+ - `custom_types`: `{id: <Custom type>, …}`: `id` can be anything as all as it does not contain any '('
 
 #### Method
 Object with the following attributes:
@@ -45,4 +45,4 @@ One of the following:
 Object with the following attributes:
  - `name`
  - `inline`: whether this custom type should be described in the "Custom type section" of the doc or it's `name` should be copied everywhere it's mentionned along with its `type`
- - `type`: `<Object>`
+ - `type`: `<Object>` (if no `type` key is present then we fall back on the value of the `inline` key)

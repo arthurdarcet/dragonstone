@@ -17,9 +17,7 @@ function check(response, q) {
 		if (typeof(schemas) == 'string' && schemas.indexOf(OPTIONAL_KEY) === 0)
 			return aux(data, schemas.slice(OPTIONAL_KEY.length));
 		
-		if (!data)
-			return schemas == 'string' || !schemas;
-		if (data instanceof Array) {
+		if (data instanceof Array || data === null) {
 			if (!(schemas instanceof Array))
 				return false;
 			for (var i in data)

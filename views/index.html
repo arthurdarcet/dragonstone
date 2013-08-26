@@ -60,7 +60,7 @@
 								<td>{{ loop.key }}</td>
 								<td>{{ parameter|value(loop.key)|raw }}</td>
 								<td>{{ parameter|type|raw }}</td>
-								<td>{{ parameter.description }}</td>
+								<td>{{ parameter.description|description|raw }}</td>
 							</tr>
 							{% endfor %}
 						</tbody>

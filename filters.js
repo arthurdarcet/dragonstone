@@ -1,5 +1,35 @@
 var config = require('./config');
 
+
+var FLAGS = {
+	optional: '(optional) ',
+	deprecated: '(deprecated) '
+};
+
+function parse_object(obj) {
+	if (typeof(obj) != 'string') return;
+	var res = {o: obj};
+	if (res.o.indexOf && res.o.indexOf(FLAGS.optional) === 0) {
+		res.o = res.o.slice(FLAGS.optional.length);
+		res.optional = true;
+	}
+	
+	var description_match = res.o.match(/([^\(]*) \((.*)\)/);
+	
+	if (description_match) {
+		res.o = description_match[1];
+		res.desc = description_match[2];
+	}
+	
+	var custom = config.custom_types[res.o];
+	if (custom) {
+		res.id = res.o;
+		res.o = custom;
+	}
+	if (res.optional || res.desc || res.id)
+		return res;
+}
+
 function muted(txt) {
 	return '<span class="text-muted">' + txt + '</span>';
 }
@@ -8,30 +38,28 @@ function value_tag(value) {
 	return '<span class="' + typeof(value) + '-value">' + value + '</span>';
 }
 
-function type_tag(type) {
+function type_tag(type, id) {
+	var parsed = parse_object(type);
+	if (parsed) return type_tag(parsed.o, parsed.id);
 	if (['int', 'float', 'string', 'bool'].indexOf(type) != -1)
 		return '<span class="base-type">' + type + '</span>';
-	if (type in config.custom_types) {
-		var custom = config.custom_types[type];
-		if (custom.inline)
-			return type_tag(custom.type) + (custom.name ? muted('(' + custom.name + ')') : '');
-		else
-			return '<a href="#custom-type-' + type + '" class="custom-type">' + custom.name + '</a>';
-	}
-	if (type.indexOf('|') != -1)
-		return '<span class="enumerated-type">enumerated</span> ' + muted('(' + type.split('|').join(', ') + ')');
-	return '<span class="unknown-type">' + type + '</span>';
+	if (typeof(type) == 'string')
+		return '<span class="enumerated-type">enumerated</span> ' + muted(' (' + type.split('|').join(', ') + ')');
+	if (type.inline)
+		return type_tag(type.type || type.inline) + (type.name ? muted(' (' + type.name + ')') : '');
+	else
+		return '<a href="#custom-type-' + id + '" class="custom-type">' + type.name + '</a>';
 }
 
-function value_input(parameter, name) {
-	if (parameter.type in config.custom_types) {
-		parameter.type = config.custom_types[parameter.type].type;
-		return value_input(parameter, name);
-	}
+function value_input(parameter, name, type) {
+	type = type || parameter.type;
+	var parsed = parse_object(type);
+	if (parsed) return value_input(parameter, name, parsed.o);
+	
 	var attr = 'class="form-control input-sm" name="' + name + '"';
-	if (parameter.type == 'bool')
+	if (type == 'bool')
 		return '<input type="checkbox" ' + (parameter.default ? 'checked ' : '' ) + attr + '>';
-	if (parameter.type.indexOf('|') != -1) {
+	if (type.indexOf && type.indexOf('|') != -1) {
 		var select = '<select ' + attr + '>';
 		var vals = parameter.type.split('|');
 		if (!parameter.required && !parameter.default)
@@ -42,11 +70,6 @@ function value_input(parameter, name) {
 	}
 	return '<input ' + attr + ' placeholder="' + (parameter.default || '') + '">';
 }
-
-var FLAGS = {
-	optional: '(optional) ',
-	deprecated: '(deprecated) '
-};
 module.exports = {
 	description: function(str) {
 		if (str.indexOf && str.indexOf(FLAGS.deprecated) === 0)
@@ -63,7 +86,21 @@ module.exports = {
 	object: function(obj, is_valued) {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';
 		function stringify(obj, indent) {
-			if (!obj) return '';
+			if (!is_valued) {
+				var parsed = parse_object(obj);
+				if (parsed) {
+					var res;
+					if (!parsed.id || parsed.o.inline)
+						res = stringify(parsed.id ? parsed.o.type : parsed.o, indent);
+					else
+						res = type_tag(parsed.o, parsed.id);
+					if (parsed.o.inline && parsed.o.name) res += muted(' (' + parsed.o.name + ')');
+					if (parsed.desc) res = muted('[' + parsed.desc + '] ') + res;
+					if (parsed.optional) res = muted(FLAGS.optional) + res;
+					return res;
+				}
+			}
+			
 			if (obj instanceof Array) {
 				if (is_valued)
 					return '[' + obj.map(function(o) { return stringify(o, indent) }).join(', ') + ']';
@@ -81,12 +118,7 @@ module.exports = {
 				
 				return '{<br>' + objects.join(',<br>') + '<br>' + indent + '}';
 			}
-			if (obj.indexOf && obj.indexOf(FLAGS.optional) === 0)
-				return muted(FLAGS.optional) + stringify(obj.slice(FLAGS.optional.length));
 			
-			var custom_type = config.custom_types[obj];
-			if (custom_type && custom_type.inline)
-				return stringify(custom_type.type, indent) + (custom_type.name ? muted(' (' + custom_type.name + ')') : '');
 			return is_valued ? value_tag(obj) : type_tag(obj);
 		}
 		return stringify(obj, '');
