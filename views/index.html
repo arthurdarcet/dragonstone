@@ -36,7 +36,7 @@
 				<i class="glyphicon glyphicon-lock"></i>
 				{% endif %}
 				<span class="btn btn-default btn-sm pull-right test-endpoint">Try it</span>
-				<span class="uri">{{ loop.key|endpoint(endpoint) }}</span>{% if method.description %}:{% endif %} 
+				<span class="uri">{{ loop.key }}</span>{% if method.description %}:{% endif %}
 				<span class="text-muted">{{ method.description }}</span>
 			</div>
 			<dl class="list-group">

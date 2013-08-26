@@ -6,7 +6,7 @@ var filters = require('../filters');
 var methods = {};
 config.endpoints.map(function(endpoint) {
 	for (var uri in endpoint.methods)
-		methods[filters.endpoint(uri, endpoint)] = endpoint.methods[uri];
+		methods[uri] = endpoint.methods[uri];
 });
 
 var OPTIONAL_KEY = '(optional) ';
@@ -66,9 +66,8 @@ function check_all(req, cb) {
 	var base_url = req.query.base_url || config.base_url;
 	async.map(config.endpoints, function(endpoint, cb) {
 		var methods = [];
-		for (var uri in endpoint.methods) {
-			methods.push({uri: filters.endpoint(uri, endpoint), method: endpoint.methods[uri]});
-		}
+		for (var uri in endpoint.methods)
+			methods.push({uri: uri, method: endpoint.methods[uri]});
 		async.map(methods, function(o, cb) {
 			var params = {};
 			if (o.method.parameters)
