@@ -36,7 +36,7 @@ function value_input(parameter, name) {
 		var vals = parameter.type.split('|');
 		if (!parameter.required && !parameter.default) {
 			parameter.default = '';
-			vals.shift('');
+			vals.unshift('');
 		}
 		for (var i in vals)
 			select += '<option value="' + vals[i] + '" ' + (parameter.default == vals[i] ? 'selected' : '') + '>' + vals[i] + '</option>';

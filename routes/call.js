@@ -2,6 +2,10 @@ var request = require('superagent');
 var config = require('../config');
 var filters = require('../filters');
 
+// As long as https://github.com/visionmedia/superagent/issues/197
+// is still opened, there is no way of setting a CA certificate for https
+// requests.
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 var URL_VAR_MATCH = /{[^{}]+}/g;
 function call(options, cb) {
