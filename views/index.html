@@ -57,8 +57,8 @@
 							{% for parameter in method.parameters %}
 							<tr>
 								<td>{% if parameter.required %}*{% endif %}</td>
-								<td>{{ parameter.name }}</td>
-								<td>{{ parameter|value|raw }}</td>
+								<td>{{ loop.key }}</td>
+								<td>{{ parameter|value(loop.key)|raw }}</td>
 								<td>{{ parameter|type|raw }}</td>
 								<td>{{ parameter.description }}</td>
 							</tr>

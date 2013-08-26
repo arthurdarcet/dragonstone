@@ -70,11 +70,10 @@ function check_all(req, cb) {
 		}
 		async.map(methods, function(o, cb) {
 			var params = {};
-			if (o.method.parameters) {
-				o.method.parameters.map(function(param) {
-					if (param.test_value) params[param.name] = param.test_value;
-				});
-			}
+			if (o.method.parameters)
+				for (var name in o.method.parameters)
+					if (o.method.parameters[name].test_value)
+						params[name] = o.method.parameters[name].test_value
 			call.call({
 				base_url: req.query.base_url,
 				uri: o.uri,

@@ -23,12 +23,12 @@ function type_tag(type) {
 	return '<span class="unknown-type">' + type + '</span>';
 }
 
-function value_input(parameter) {
+function value_input(parameter, name) {
 	if (parameter.type in config.custom_types) {
 		parameter.type = config.custom_types[parameter.type].type;
-		return value_input(parameter);
+		return value_input(parameter, name);
 	}
-	var attr = 'class="form-control input-sm" name="' + parameter.name + '"';
+	var attr = 'class="form-control input-sm" name="' + name + '"';
 	if (parameter.type == 'bool')
 		return '<input type="checkbox" ' + (parameter.default ? 'checked ' : '' ) + attr + '>';
 	if (parameter.type.indexOf('|') != -1) {
@@ -53,8 +53,8 @@ module.exports = {
 	type: function(parameter) {
 		return type_tag(parameter.type);
 	},
-	value: function(parameter) {
-		return value_input(parameter);
+	value: function(parameter, name) {
+		return value_input(parameter, name);
 	},
 	object: function(obj, is_valued) {
 		var INDENT = '&nbsp;&nbsp;&nbsp;&nbsp;';

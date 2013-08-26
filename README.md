@@ -18,15 +18,17 @@ Object with the following attributes:
  - `verb`
  - `URI` (ex: `/users/{name}` where `name` is the name of one of the parameters)
  - `auth_required`
- - `parameters`: list of:
-  - `name`
-  - `description`
-  - `required`
-  - `type`: a `<Parameter>`
-  - `default`: the value the API will default to if the parameter isn't supplied
+ - `parameters`: object of the form `{<NAME>: <Parameter>, …}`
  - `reponses`: object `{<CODE>: <Object>, …}` where `<CODE>` is of the form `200`, `3xx`, `41x`, `xxx` (`<CODE>` match `[0-9x]{3}`)
 
 #### Parameter
+Object with the following attributes:
+ - `description`
+ - `required`
+ - `type`: a `<Parameter type>`
+ - `default`: the value the API will default to if the parameter isn't supplied
+
+#### Parameter type
 One of the following:
  - `int`, `float`, `string` or `bool`
  - `"value1|value2|…"`
@@ -38,7 +40,7 @@ One of the following:
  - `(optional) <Object>`
  - `{"key": <Object>, …}`
  - `[<Object>]`, `[<Object>, size_max]` or `[<Object>, size_max, size_min]`
- - `<Parameter>`
+ - `<Parameter type>`
 
 #### Custom type
 Object with the following attributes:

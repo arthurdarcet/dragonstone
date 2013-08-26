@@ -18,13 +18,14 @@ module.exports = {
 			'GET /{name}': {
 				description: 'Get a specific user',
 				auth_required: false,
-				parameters: [{
-					name: 'name',
-					description: 'The name of the requested user',
-					required: true,
-					test_value: 'braboule',
-					type: 'string'
-				}],
+				parameters: {
+					name: {
+						description: 'The name of the requested user',
+						required: true,
+						test_value: 'braboule',
+						type: 'string'
+					}
+				},
 				responses: {
 					200: 'user',
 					404: 'error'
@@ -49,13 +50,14 @@ module.exports = {
 			'GET /{slug}': {
 				description: 'Get a specific post',
 				auth_required: false,
-				parameters: [{
-					name: 'slug',
-					description: 'The slug of the requested post',
-					required: true,
-					test_value: 'post-1',
-					type: 'string'
-				}],
+				parameters: {
+					slug: {
+						description: 'The slug of the requested post',
+						required: true,
+						test_value: 'post-1',
+						type: 'string'
+					}
+				},
 				responses: {
 					200: 'post',
 					404: 'error'
@@ -63,23 +65,24 @@ module.exports = {
 			},
 			'POST /': {
 				auth_required: true,
-				parameters: [{
-					name: 'title',
-					description: 'The title of the post',
-					required: true,
-					type: 'string'
-				}, {
-					name: 'content',
-					description: 'The content of the post',
-					required: true,
-					type: 'string'
-				}, {
-					name: 'category',
-					description: 'The category of the post',
-					required: false,
-					default: 'python',
-					type: 'post_category'
-				}],
+				parameters: {
+					title: {
+						description: 'The title of the post',
+						required: true,
+						type: 'string'
+					},
+					content: {
+						description: 'The content of the post',
+						required: true,
+						type: 'string'
+					},
+					category: {
+						description: 'The category of the post',
+						required: false,
+						default: 'python',
+						type: 'post_category'
+					}
+				},
 				responses: {
 					201: {slug: 'string'},
 					'4xx': 'error'
