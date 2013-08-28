@@ -13,7 +13,7 @@ function call(options, cb) {
 	if (!url) {
 		var uri = options.uri.split(' ');
 		method = uri[0];
-		url = (options.base_url || config.base_url) + uri.slice(1).join(' ');
+		url = options.base_url + uri.slice(1).join(' ');
 	}
 	var url_vars = url.match(URL_VAR_MATCH);
 	for (var i in url_vars) {
@@ -41,8 +41,9 @@ module.exports = function(req, res) {
 	if (!req.body.uri) {
 		return res.send(400, 'Missing URI');
 	}
-	call(req.body, function(err, response) {
-		res.send(response.status || 400, err || {
+	call(req.body, function(error, response) {
+		res.send(200, {
+			error: error,
 			data: filters.object(response.data, true),
 			status: response.status,
 			valid: check.check(response, req.body)

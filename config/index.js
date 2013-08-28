@@ -15,5 +15,7 @@ config.endpoints.map(function(endpoint) {
 	endpoint.methods = methods;
 	endpoint.id = endpoint.name.replace(/[^a-z0-9]/ig, '-');
 });
+if (!(config.base_urls instanceof Array))
+	config.base_urls = [config.base_urls];
 
 module.exports = config;

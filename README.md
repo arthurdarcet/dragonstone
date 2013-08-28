@@ -7,7 +7,7 @@ Live demo [here](http://dragonstone.darcet.fr)
 Override the default settings by defining them in `config/local.js`
  - `listen`: `{host: '127.0.0.1', port: 1111}`
  - `name`
- - `base_url`
+ - `base_urls`: Array of URLs (or just a string)
  - `auth`
  - `endpoints`: list of `{name: …, prefix: …, methods: {'<VERB> URI': <Method>, …}}` with `VERB` being an `HTTP` verb (`GET`, `POST`, …) and `URI` an API endpoint. Ex: `GET /users/{name}`
  - `custom_types`: `{id: <Custom type>, …}`: `id` can be anything as all as it does not contain any '('

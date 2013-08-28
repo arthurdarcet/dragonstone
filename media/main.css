@@ -32,9 +32,12 @@
 	color: rgb(100, 180, 100);
 }
 
+.list-group {
+	margin-top: 0;
+}
 dd.list-group-item  {
 	border: 0;
-	margin-bottom: 23px;
+	padding-bottom: 23px;
 }
 .table, .test-result .alert {
 	margin-bottom: 0;

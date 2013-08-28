@@ -28,14 +28,16 @@ if (cluster.isMaster) {
 	if (config.debug) {
 		app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 	}
+	
 	app.set('auth', config.auth);
-	app.set('base_url', config.base_url);
+	app.set('base_urls', config.base_urls);
 	app.set('name', config.name);
 	app.use(function(req, res, next) {
 		if(req.query.token)
 			app.set('token', req.query.token || '');
 		else
 			app.set('token', undefined);
+		app.set('base_url', req.query.base_url || config.base_urls[0]);
 		next();
 	});
 	

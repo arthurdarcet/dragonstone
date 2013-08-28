@@ -95,7 +95,7 @@ module.exports = {
 					else
 						res = type_tag(parsed.o, parsed.id);
 					if (parsed.o.inline && parsed.o.name) res += muted(' (' + parsed.o.name + ')');
-					if (parsed.desc) res = muted('[' + parsed.desc + '] ') + res;
+					if (parsed.desc) res = muted(parsed.desc + ': ') + res;
 					if (parsed.optional) res = muted(FLAGS.optional) + res;
 					return res;
 				}

@@ -61,7 +61,6 @@ function check(response, q) {
 
 function check_all(req, cb) {
 	var call = require('./call');
-	var base_url = req.query.base_url || config.base_url;
 	async.map(config.endpoints, function(endpoint, cb) {
 		var methods = [];
 		for (var uri in endpoint.methods)
@@ -73,7 +72,7 @@ function check_all(req, cb) {
 					if (o.method.parameters[name].test_value)
 						params[name] = o.method.parameters[name].test_value
 			call.call({
-				base_url: req.query.base_url,
+				base_url: req.query.base_url || config.base_urls[0],
 				uri: o.uri,
 				params: params,
 				token: req.query.token

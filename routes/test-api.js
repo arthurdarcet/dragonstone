@@ -13,7 +13,7 @@ router.get('/users/:slug', function(req, res) {
 	});
 });
 router.get('/posts', function(req, res) {
-	function d(i) { return {slug: 'post-' + i, url: config.base_url + '/posts/post-' + i}; }
+	function d(i) { return {slug: 'post-' + i, url: req.app.settings.base_url + '/posts/post-' + i}; }
 	res.send([0, 1, 2, 3].map(d));
 });
 router.get('/posts/:slug', function(req, res) {

@@ -25,13 +25,22 @@
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	Token: <span class="token">{{ settings.token }}</span>
 </div>
+<div class="well">
+	<span class="text-muted">Base URL:</span>
+	<select id="base_url" class="{% if settings.base_urls.length == 1 %}hide{% endif %}">
+		{% for url in settings.base_urls %}
+		<option value="{{ url }}" {% if url == settings.base_url %}selected{% endif %}>{{ url }}</option>
+		{% endfor %}
+	</select>
+	{% if settings.base_urls.length == 1 %}{{ settings.base_url }}{% endif %}
+</div>
 {% endif %}
 <div class="tab-content">
 	{% for endpoint in endpoints %}
 	<div class="tab-pane {% if loop.first %}active{% endif %}" id="{{ endpoint.id }}">
 		{% for method in endpoint.methods %}
 		<div class="panel panel-default">
-			<div class="panel-heading">
+			<div class="panel-body">
 				{% if method.auth_required %}
 				<i class="glyphicon glyphicon-lock"></i>
 				{% endif %}
@@ -39,10 +48,10 @@
 				<span class="uri">{{ loop.key }}</span>{% if method.description %}:{% endif %}
 				<span class="text-muted description">{{ method.description|description|raw }}</span>
 			</div>
-			<dl class="list-group">
+			<dl class="list-group ">
 				{% if method.parameters %}
-				<dt class="list-group-item">Parameters:</dt>
-				<dd class="list-group-item">
+				<dt class="list-group-item panel-footer">Parameters:</dt>
+				<dd class="list-group-item panel-footer">
 					<table class="table">
 						<thead>
 							<tr>
@@ -68,19 +77,18 @@
 				</dd>
 				{% endif %}
 				{% for response in method.responses %}
-				<dt class="list-group-item">Response <span="response-code">{{ loop.key }}</span>:</dt>
-				<dd class="list-group-item">
+				<dt class="list-group-item panel-footer">Response <span="response-code">{{ loop.key }}</span>:</dt>
+				<dd class="list-group-item panel-footer">
 					<div class="object">{{ response|object|raw }}</div>
 				</dd>
 				{% endfor %}
-				<dt class="list-group-item hide test-result">
+				<dt class="list-group-item hide test-result panel-footer">
 					<i class="glyphicon glyphicon-ok test-result-valid hide"></i>
 					<i class="glyphicon glyphicon-warning-sign test-result-invalid hide"></i>
 					Results: <span class="response-code"></span>
 				</dt>
-				<dd class="list-group-item hide test-result">
+				<dd class="list-group-item hide test-result panel-footer">
 					<div class="object test-result-data"></div>
-					<div class="test-result-error alert alert-danger"></div>
 					<div class="test-result-loading"></div>
 				<dd>
 			</dl>
@@ -124,17 +132,22 @@
 					$('.token').html(data.access_token);
 					$('.auth-form, .auth-success').toggleClass('hide');
 					if (window.history)
-						window.history.pushState({}, '', '?token=' + data.access_token);
+						window.history.pushState({}, '', '?base_url=' + $('#base_url').val() + '&token=' + data.access_token);
 				}
 				else {
 					$('.auth-error').removeClass('hide').html(error);
 				}
 			})
 		});
+		$('#base_url').change(function(evt) {
+			$('.auth-error, .auth-success').addClass('hide');
+			$('.auth-form').removeClass('hide');
+			if (window.history)
+				window.history.pushState({}, '', '?base_url=' + $('#base_url').val());
+		});
 		$('.test-endpoint').click(function(evt) {
 			var endpoint = $(evt.currentTarget).parent().parent();
 			var data_el = endpoint.find('.test-result-data').hide();
-			var error_el = endpoint.find('.test-result-error').hide();
 			var loading_el = endpoint.find('.test-result-loading').show();
 			var header = endpoint.find('.test-result').removeClass('hide');
 			var response_code = header.find('.response-code').html('');
@@ -149,6 +162,7 @@
 				url: '/call',
 				method: 'POST',
 				data: {
+					base_url: $('#base_url').val(),
 					uri: endpoint.find('.uri').html(),
 					params: params,
 					token: token
@@ -156,23 +170,20 @@
 			}).always(function(data, status, error) {
 				loading_el.hide();
 				response_code.html(data.status);
-				if (status == 'success') {
-					data_el.show();
+				data_el.show();
+				if (data.error) {
+					data_el.html('Error: ' + data.error);
+					data_el.addClass('alert alert-danger');
+				} else {
 					data_el.html(data.data);
-					if (data.valid) {
-						header.find('.test-result-invalid').addClass('hide');
-						header.find('.test-result-valid').removeClass('hide');
-					} else {
-						header.find('.test-result-valid').addClass('hide');
-						header.find('.test-result-invalid').removeClass('hide');
-					}
+					data_el.removeClass('alert alert-danger');
 				}
-				else {
-					error_el.show();
-					if (data.responseJSON && data.responseJSON.data)
-						error_el.html(data.responseJSON.data);
-					else
-						error_el.html((error || 'Error') + ': ' + data.responseText);
+				if (data.valid) {
+					header.find('.test-result-invalid').addClass('hide');
+					header.find('.test-result-valid').removeClass('hide');
+				} else {
+					header.find('.test-result-valid').addClass('hide');
+					header.find('.test-result-invalid').removeClass('hide');
 				}
 			});
 		})
