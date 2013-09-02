@@ -6,7 +6,7 @@ var config      = require('./config');
 var routes      = require('./routes');
 
 
-if (cluster.isMaster) {
+if (!module.parent && cluster.isMaster) {
 	var cpuCount = require('os').cpus().length;
 	for (var i = 0; i < cpuCount; i += 1) {
 		cluster.fork();
@@ -48,4 +48,6 @@ if (cluster.isMaster) {
 	app.use('/test-api', routes.test_api);
 	
 	app.listen(config.listen.port, config.listen.host);
+	
+	module.exports = app;
 }

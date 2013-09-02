@@ -1,8 +1,10 @@
-var fs     = require('fs');
+var fs = require('fs');
 
 var config;
-if (fs.existsSync(__dirname + '/local.js'))
-	config = require('./local');
+var env = process.env.ENV || 'local';
+
+if (fs.existsSync(__dirname + '/' + env + '.js'))
+	config = require('./' + env);
 else
 	config = require('./default');
 

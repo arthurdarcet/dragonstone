@@ -16,11 +16,14 @@
 		"async": "0.2.x",
 		"consolidate": "0.9.x",
 		"express": "3.x",
+		"mocha": "1.12.x",
 		"superagent": "0.15.x",
 		"supervisor": "0.5.x",
+		"supertest": "0.7.x",
 		"swig": "0.14.x"
 	},
 	"scripts": {
-		"start": "node_modules/.bin/supervisor -e 'js|json|html' app"
+		"start": "node_modules/.bin/supervisor -e 'js|json|html' app",
+		"test": "node_modules/.bin/mocha --timeout 15000 --reporter nyan test.js"
 	}
 }
