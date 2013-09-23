@@ -24,7 +24,7 @@ Object with the following attributes:
  - `description`
  - `required` (default `false`, will be changed to `true` if the parameter is in the `URI`)
  - `type`: a `<Parameter type>`
- - `testing_value`: the value used when generating the `check.{html,json}` pages
+ - `testing_value`: the value used when generating the `check.{html,json}` pages
  - `default`: the value the API will default to if the parameter isn't supplied
 
 #### Parameter type

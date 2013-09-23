@@ -41,7 +41,7 @@ function value_tag(value) {
 function type_tag(type, id) {
 	var parsed = parse_object(type);
 	if (parsed) return type_tag(parsed.o, parsed.id);
-	if (['int', 'float', 'string', 'bool'].indexOf(type) != -1)
+	if (['', 'int', 'float', 'string', 'bool'].indexOf(type) != -1)
 		return '<span class="base-type">' + type + '</span>';
 	if (typeof(type) == 'string')
 		return '<span class="enumerated-type">enumerated</span> ' + muted(' (' + type.split('|').join(', ') + ')');
