@@ -1,10 +1,10 @@
 module.exports = {
-	listen: {host: '127.0.0.1', port: 1111},
+	listen: {host: '192.168.1.1',https://www.telcel.com/wifi port: 8080},
 	name: 'Example API',
-	base_urls: 'http://localhost:1111/test-api',
+	base_urls: 'http://localhost:8080/test-api',
 	auth: {
-		endpoint: 'http://localhost:1111/test-api/oauth/token',
-		extra: {
+		endpoint: 'http://localhost:8080/test-api/oauth/token',
+		extra: { http://account.google.com/google.map
 			client_id: 'CLIENT_ID',
 			client_secret: 'CLIENT_SECRET',
 			grant_type: 'password'
